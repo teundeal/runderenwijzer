@@ -28,3 +28,21 @@ setInterval(() => {
   showStage();
 }, 2600);
 showStage();
+const anatomyData = {
+  oog: { title: "Het oog", text: "Met de ogen kan een rund zijn omgeving waarnemen. Zicht speelt onder andere een rol bij het herkennen van beweging en andere dieren.", link: "anatomie.html" },
+  oor: { title: "Het oor", text: "Runderen hebben een goed gehoor en kunnen hun oren onafhankelijk van elkaar bewegen. Oorstand en beweging kunnen ook iets zeggen over gedrag.", link: "gedrag.html" },
+  mond: { title: "De mond", text: "Een rund gebruikt de mond om voer op te nemen. Met de tong en tanden wordt het voer verwerkt voordat het verder door het spijsverteringsstelsel gaat.", link: "voeding.html" },
+  buik: { title: "De buik", text: "In de buik bevinden zich de vier magen van een rund. Hierdoor kan een rund plantaardig voer goed benutten en herkauwen.", link: "voeding.html" },
+  poot: { title: "De poot en klauw", text: "Sterke en gezonde klauwen zijn belangrijk voor beweging en welzijn. Regelmatige controle helpt problemen vroeg te herkennen.", link: "gezondheid.html" },
+  uier: { title: "De uier", text: "Bij een melkkoe bestaat de uier uit vier kwartieren. Een goede uiergezondheid is belangrijk voor het welzijn van de koe en de melkproductie.", link: "gezondheid.html" }
+};
+document.querySelectorAll(".hotspot").forEach(button => {
+  button.addEventListener("click", () => {
+    const data = anatomyData[button.dataset.part];
+    if (!data) return;
+    document.getElementById("partTitle").textContent = data.title;
+    document.getElementById("partText").textContent = data.text;
+    document.getElementById("partLink").href = data.link;
+    document.querySelector(".info-tag").textContent = "Geselecteerd";
+  });
+});
