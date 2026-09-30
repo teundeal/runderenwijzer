@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Runderenwijzer</title>
+  <meta name="description" content="Runderenwijzer - een interactieve kenniswebsite over runderen voor studenten diergerichte opleidingen.">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <a class="logo" href="index.html"><span class="logo-mark">🐄</span> Runderenwijzer</a>
+    <nav aria-label="Hoofdnavigatie">
+      <a class="active" href="index.html">Home</a>
+      <a href="rassen.html">Rassen</a>
+      <a href="anatomie.html">Anatomie</a>
+      <a href="gedrag.html">Gedrag</a>
+      <a href="voeding.html">Voeding</a>
+      <a href="gezondheid.html">Gezondheid</a>
+      <a href="huisvesting.html">Huisvesting</a>
+      <a href="rundveehouderij.html">Rundveehouderij</a>
+      <a href="weetjes.html">Weetjes</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-text">
+        <p class="eyebrow">Kennisplatform voor dierstudenten</p>
+        <h1>Ontdek de wereld van <span>runderen</span></h1>
+        <p class="lead">Van anatomie en gedrag tot voeding, gezondheid en huisvesting. Leer meer over runderen op een duidelijke en interactieve manier.</p>
+        <a class="button" href="#ontdek">Ontdek runderen <span>→</span></a>
+      </div>
+
+      <div class="cow-card" aria-label="Groei van kalf naar volwassen rund">
+        <div class="cow-stage">
+          <div class="cow-illustration" id="cowIllustration" aria-hidden="true">🐮</div>
+        </div>
+        <div class="growth-info">
+          <div>
+            <strong id="growthTitle">Kalf</strong>
+            <span id="growthText">De eerste levensfase</span>
+          </div>
+          <span class="growth-number" id="growthNumber">1 / 4</span>
+        </div>
+        <div class="growth-track"><div class="growth-fill" id="growthFill"></div></div>
+      </div>
+    </section>
+
+    <section class="intro" id="ontdek">
+      <p class="eyebrow">Runderenwijzer</p>
+      <h2>Waar wil je meer over weten?</h2>
+      <p>Gebruik de onderwerpen hieronder om snel naar de informatie te gaan die je zoekt.</p>
+
+      <div class="topic-grid">
+        <a class="topic-card" href="rassen.html"><span>🔎</span><h3>Rassen</h3><p>Ontdek verschillende runderrassen en hun kenmerken.</p></a>
+        <a class="topic-card" href="anatomie.html"><span>🧬</span><h3>Anatomie</h3><p>Leer hoe het lichaam van een rund is opgebouwd.</p></a>
+        <a class="topic-card" href="gedrag.html"><span>🧠</span><h3>Gedrag</h3><p>Leer runderen beter begrijpen aan de hand van hun gedrag.</p></a>
+        <a class="topic-card" href="voeding.html"><span>🌾</span><h3>Voeding</h3><p>Ontdek wat runderen eten en hoe herkauwen werkt.</p></a>
+        <a class="topic-card" href="gezondheid.html"><span>❤️</span><h3>Gezondheid</h3><p>Leer waarop je let bij een gezond rund.</p></a>
+        <a class="topic-card" href="huisvesting.html"><span>🏡</span><h3>Huisvesting</h3><p>Bekijk verschillende manieren waarop runderen worden gehuisvest.</p></a>
+        <a class="topic-card" href="rundveehouderij.html"><span>🌍</span><h3>Rundveehouderij</h3><p>Maak kennis met melkvee, vleesvee en de dagelijkse praktijk.</p></a>
+        <a class="topic-card" href="weetjes.html"><span>💡</span><h3>Weetjes</h3><p>Korte en interessante feiten over runderen.</p></a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <strong>Runderenwijzer</strong>
+    <span>Een kenniswebsite voor studenten diergerichte opleidingen.</span>
+  </footer>
+
+  <script src="js/script.js"></script>
+</body>
+</html>
