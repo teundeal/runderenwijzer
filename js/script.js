@@ -1,33 +1,39 @@
 const stages = [
-  { title: "Kalf", text: "0 tot 6 maanden · jonge vrouwelijke rund", emoji: "🐮", size: "scale(0.72)" },
-  { title: "Pink", text: "6 tot ongeveer 15 maanden · vrouwelijk rund dat nog niet heeft gekalfd", emoji: "🐮", size: "scale(0.86)" },
-  { title: "Vaars", text: "Vanaf ongeveer 15 maanden tot de eerste kalving", emoji: "🐄", size: "scale(0.96)" },
-  { title: "Koe", text: "Volwassen vrouwelijk rund na het eerste kalf", emoji: "🐄", size: "scale(1.08)" }
+  { title: "Kalf", text: "0 tot 6 maanden · jong rund", image: "images/kalf.jpg", size: "scale(.88)" },
+  { title: "Pink", text: "6 tot ongeveer 18 maanden · vrouwelijk rund dat nog niet heeft gekalfd", image: "images/pink.jpg", size: "scale(.96)" },
+  { title: "Vaars", text: "Ongeveer 15 tot 24 maanden · vrouwelijk rund tot de eerste kalving", image: "images/vaars.jpg", size: "scale(1)" },
+  { title: "Koe", text: "Volwassen vrouwelijk rund na het eerste kalf", image: "images/koe.jpg", size: "scale(1.05)" }
 ];
 const cow = document.getElementById("cowIllustration");
 const title = document.getElementById("growthTitle");
-const text = document.getElementById("growthText");
+const description = document.getElementById("growthText");
 const number = document.getElementById("growthNumber");
 const fill = document.getElementById("growthFill");
 let stage = 0;
 
 function showStage() {
   const current = stages[stage];
-  cow.style.transform = "scale(0.55)";
-  setTimeout(() => {
-    cow.textContent = current.emoji;
+  cow.classList.add("is-changing");
+  window.setTimeout(() => {
+    cow.src = current.image;
+    cow.alt = current.title;
     cow.style.transform = current.size;
     title.textContent = current.title;
-    text.textContent = current.text;
+    description.textContent = current.text;
     number.textContent = (stage + 1) + " / " + stages.length;
     fill.style.width = ((stage + 1) / stages.length * 100) + "%";
+    cow.classList.remove("is-changing");
   }, 180);
 }
-setInterval(() => {
+cow.addEventListener("error", () => {
+  cow.alt = "Afbeelding ontbreekt: " + stages[stage].image;
+});
+window.setInterval(() => {
   stage = (stage + 1) % stages.length;
   showStage();
-}, 2600);
+}, 4000);
 showStage();
+
 const anatomyData = {
   oog: { title: "Het oog", text: "Met de ogen kan een rund zijn omgeving waarnemen. Zicht speelt onder andere een rol bij het herkennen van beweging en andere dieren.", link: "anatomie.html" },
   oor: { title: "Het oor", text: "Runderen hebben een goed gehoor en kunnen hun oren onafhankelijk van elkaar bewegen. Oorstand en beweging kunnen ook iets zeggen over gedrag.", link: "gedrag.html" },
