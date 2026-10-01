@@ -1,8 +1,8 @@
 const stages = [
-  { title: "Kalf", text: "0 tot 6 maanden · jong rund", image: "images/kalf.jpg", size: "scale(.88)" },
-  { title: "Pink", text: "6 tot ongeveer 18 maanden · vrouwelijk rund dat nog niet heeft gekalfd", image: "images/pink.jpg", size: "scale(.96)" },
-  { title: "Vaars", text: "Ongeveer 15 tot 24 maanden · vrouwelijk rund tot de eerste kalving", image: "images/vaars.jpg", size: "scale(1)" },
-  { title: "Koe", text: "Volwassen vrouwelijk rund na het eerste kalf", image: "images/koe.jpg", size: "scale(1.05)" }
+  { title: "Kalf", text: "0 tot 6 maanden · jong rund", image: "images/kalf.jpg.png", size: "scale(.88)" },
+  { title: "Pink", text: "6 tot ongeveer 18 maanden · vrouwelijk rund dat nog niet heeft gekalfd", image: "images/pink.jpg.png", size: "scale(.96)" },
+  { title: "Vaars", text: "Ongeveer 15 tot 24 maanden · vrouwelijk rund tot de eerste kalving", image: "images/vaars.jpg.png", size: "scale(1)" },
+  { title: "Koe", text: "Volwassen vrouwelijk rund na het eerste kalf", image: "images/koe.jpg.png", size: "scale(1.05)" }
 ];
 const cow = document.getElementById("cowIllustration");
 const title = document.getElementById("growthTitle");
