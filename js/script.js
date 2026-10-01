@@ -1,8 +1,8 @@
 const stages = [
-  { title: "Kalf", text: "De eerste levensfase", emoji: "🐮", size: "scale(0.72)" },
-  { title: "Jong rund", text: "In de groeifase", emoji: "🐮", size: "scale(0.86)" },
-  { title: "Jongvolwassen", text: "Bijna volgroeid", emoji: "🐄", size: "scale(0.96)" },
-  { title: "Volwassen rund", text: "Volgroeid rund", emoji: "🐄", size: "scale(1.08)" }
+  { title: "Kalf", text: "0 tot 6 maanden · jonge vrouwelijke rund", emoji: "🐮", size: "scale(0.72)" },
+  { title: "Pink", text: "6 tot ongeveer 15 maanden · vrouwelijk rund dat nog niet heeft gekalfd", emoji: "🐮", size: "scale(0.86)" },
+  { title: "Vaars", text: "Vanaf ongeveer 15 maanden tot de eerste kalving", emoji: "🐄", size: "scale(0.96)" },
+  { title: "Koe", text: "Volwassen vrouwelijk rund na het eerste kalf", emoji: "🐄", size: "scale(1.08)" }
 ];
 const cow = document.getElementById("cowIllustration");
 const title = document.getElementById("growthTitle");
