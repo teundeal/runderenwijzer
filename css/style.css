@@ -88,3 +88,104 @@ footer strong { color: white; }
   .interactive-cow { min-height: 320px; }
   .cow-image-wrap { width: min(92%, 720px); }
 }
+
+/* Bewerkmodus */
+#editorToolbar {
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  max-width: min(95vw, 700px);
+  padding: 10px 12px;
+  background: var(--white);
+  border: 1px solid rgba(36,72,58,.14);
+  border-radius: 16px;
+  box-shadow: 0 10px 35px rgba(36,72,58,.18);
+  font-size: .84rem;
+}
+#editorToolbar button {
+  border: 0;
+  padding: 9px 12px;
+  border-radius: 10px;
+  background: var(--green-light);
+  color: var(--green);
+  font-weight: 800;
+  cursor: pointer;
+}
+#editorToolbar .editor-main-btn {
+  background: var(--green);
+  color: white;
+}
+#editorToolbar button:hover { transform: translateY(-1px); }
+#editorStatus { color: #6b7169; }
+body.edit-mode main h1,
+body.edit-mode main h2,
+body.edit-mode main h3,
+body.edit-mode main p,
+body.edit-mode main .growth-info strong,
+body.edit-mode main .growth-info span {
+  outline: 2px dashed rgba(36,72,58,.35);
+  outline-offset: 4px;
+  cursor: text;
+}
+#hotspotEditor {
+  position: fixed;
+  inset: 0;
+  z-index: 1100;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(20,30,25,.36);
+}
+#hotspotEditor.visible { display: flex; }
+.hotspot-editor-box {
+  width: min(520px, 100%);
+  padding: 26px;
+  background: var(--white);
+  border-radius: 20px;
+  box-shadow: 0 18px 55px rgba(0,0,0,.22);
+  position: relative;
+}
+.hotspot-editor-box h3 { margin-top: 0; color: var(--green); }
+.hotspot-editor-box label {
+  display: block;
+  margin: 12px 0;
+  color: var(--green);
+  font-weight: 800;
+  font-size: .88rem;
+}
+.hotspot-editor-box input,
+.hotspot-editor-box textarea {
+  width: 100%;
+  margin-top: 6px;
+  padding: 10px 12px;
+  border: 1px solid rgba(36,72,58,.18);
+  border-radius: 10px;
+  font: inherit;
+  color: var(--text);
+  background: #fff;
+}
+.hotspot-editor-close {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  border: 0;
+  background: transparent;
+  font-size: 1.7rem;
+  color: #6d726c;
+  cursor: pointer;
+}
+@media (max-width: 700px) {
+  #editorToolbar {
+    left: 10px;
+    right: 10px;
+    bottom: 10px;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+  }
+  #editorStatus { width: 100%; }
+}
