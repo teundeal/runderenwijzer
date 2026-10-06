@@ -199,3 +199,34 @@ body.edit-mode .editable-image {
 body.edit-mode .editable-image:hover {
   filter: brightness(.97) drop-shadow(0 14px 8px rgba(48,51,47,.18));
 }
+
+
+.user-added-images {
+  padding: 30px 5% 70px;
+}
+.user-added-images .section-heading {
+  margin-bottom: 20px;
+}
+.user-image-item {
+  display: inline-flex;
+  vertical-align: top;
+  flex-direction: column;
+  width: min(360px, 100%);
+  margin: 0 16px 16px 0;
+  padding: 12px;
+  background: var(--white);
+  border-radius: 18px;
+  box-shadow: 0 5px 20px rgba(36,72,58,.07);
+}
+.user-added-image {
+  width: 100%;
+  max-height: 300px;
+  object-fit: contain;
+  border-radius: 12px;
+  background: var(--green-light);
+}
+.user-image-item p {
+  margin: 10px 4px 2px;
+  color: var(--green);
+  font-weight: 700;
+}
