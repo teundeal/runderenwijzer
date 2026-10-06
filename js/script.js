@@ -258,6 +258,7 @@ function loadImageEdits() {
 function openImagePicker(img, index) {
   const input = document.getElementById("imageFileInput");
   if (!input) return;
+  input.dataset.addNew = "0";
   input.dataset.index = String(index);
   input.dataset.target = img.dataset.editImageTarget || "";
   input.value = "";
@@ -295,12 +296,22 @@ function compressImage(file, maxSize = 1600, quality = 0.82) {
 }
 
 async function handleImageFile(file, index) {
-  const images = getEditableImages();
-  const img = images[index];
-  if (!img) return;
-
   try {
     const dataUrl = await compressImage(file);
+
+    if (index === null || index === undefined || Number.isNaN(index)) {
+      const images = getAddedImages();
+      images.push({ src: dataUrl, caption: file.name.replace(/\.[^.]+$/, "") });
+      saveAddedImages(images);
+      renderAddedImages();
+      const status = document.getElementById("editorStatus");
+      if (status) status.textContent = "Nieuwe afbeelding toegevoegd en op deze computer opgeslagen.";
+      return;
+    }
+
+    const images = getEditableImages();
+    const img = images[index];
+    if (!img) return;
     localStorage.setItem(imageStorageKey(index), dataUrl);
     img.src = dataUrl;
     img.dataset.localImage = "1";
@@ -311,10 +322,65 @@ async function handleImageFile(file, index) {
   }
 }
 
+
+function getAddedImages() {
+  try {
+    return JSON.parse(localStorage.getItem(editStoragePrefix + activePageKey + ":added-images") || "[]");
+  } catch (e) {
+    return [];
+  }
+}
+
+function saveAddedImages(images) {
+  localStorage.setItem(editStoragePrefix + activePageKey + ":added-images", JSON.stringify(images));
+}
+
+function renderAddedImages() {
+  const main = document.querySelector("main");
+  if (!main) return;
+  let gallery = document.getElementById("userAddedImages");
+  if (!gallery) {
+    gallery = document.createElement("section");
+    gallery.id = "userAddedImages";
+    gallery.className = "user-added-images";
+    const intro = document.createElement("div");
+    intro.className = "section-heading";
+    intro.innerHTML = '<p class="eyebrow">Mijn foto's</p><h2>Eigen beeldmateriaal</h2><p>Hier komen afbeeldingen die je zelf aan de website hebt toegevoegd.</p>';
+    gallery.appendChild(intro);
+    main.appendChild(gallery);
+  }
+
+  gallery.querySelectorAll(".user-image-item").forEach(el => el.remove());
+
+  getAddedImages().forEach((item, index) => {
+    const block = document.createElement("article");
+    block.className = "user-image-item";
+    const img = document.createElement("img");
+    img.src = item.src;
+    img.alt = item.caption || "Eigen afbeelding";
+    img.className = "user-added-image";
+    const caption = document.createElement("p");
+    caption.textContent = item.caption || "Eigen afbeelding";
+    block.appendChild(img);
+    block.appendChild(caption);
+    gallery.appendChild(block);
+  });
+}
+
+async function addNewImage() {
+  const input = document.getElementById("imageFileInput");
+  if (!input) return;
+  input.dataset.addNew = "1";
+  input.dataset.index = "";
+  input.value = "";
+  input.click();
+}
+
 function resetImageEdits() {
   getEditableImages().forEach((img, index) => {
     localStorage.removeItem(imageStorageKey(index));
   });
+  localStorage.removeItem(editStoragePrefix + activePageKey + ":added-images");
   location.reload();
 }
 
@@ -357,9 +423,16 @@ createEditorUI = function() {
   input.addEventListener("change", async () => {
     const file = input.files?.[0];
     if (!file) return;
-    const index = Number(input.dataset.index);
-    await handleImageFile(file, index);
+    if (input.dataset.addNew === "1") {
+      await handleImageFile(file, null);
+    } else {
+      const index = Number(input.dataset.index);
+      await handleImageFile(file, index);
+    }
+    input.dataset.addNew = "0";
   });
+
+  renderAddedImages();
 
   const toolbar = document.getElementById("editorToolbar");
   if (toolbar) {
@@ -380,6 +453,18 @@ createEditorUI = function() {
         return;
       }
       window.alert("Klik op de afbeelding die je wilt vervangen en kies daarna een nieuw bestand.");
+    });
+
+    const addImageBtn = document.createElement("button");
+    addImageBtn.type = "button";
+    addImageBtn.textContent = "Nieuwe afbeelding";
+    toolbar.insertBefore(addImageBtn, toolbar.querySelector('[data-action="reset"]'));
+    addImageBtn.addEventListener("click", () => {
+      if (!editMode) {
+        window.alert("Klik eerst op 'Bewerken'.");
+        return;
+      }
+      addNewImage();
     });
 
     const resetImagesBtn = document.createElement("button");
