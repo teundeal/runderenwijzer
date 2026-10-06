@@ -63,17 +63,21 @@ footer strong { color: white; }
 .section-heading p:last-child { color: #656b63; margin-top: 0; }
 .anatomy-layout { display: grid; grid-template-columns: 1.2fr .8fr; gap: 24px; align-items: stretch; }
 .interactive-cow { position: relative; min-height: 390px; display: grid; place-items: center; overflow: hidden; background: linear-gradient(145deg,var(--green-light),var(--sand)); border-radius: 26px; }
- .cow-big { width: min(82%, 720px); max-height: 390px; object-fit: contain; filter: drop-shadow(0 14px 8px rgba(48,51,47,.14)); user-select: none; }
-.hotspot { position: absolute; width: 42px; height: 42px; border: 3px solid var(--white); border-radius: 50%; background: var(--green); color: white; cursor: pointer; box-shadow: 0 5px 16px rgba(36,72,58,.25); font-size: 11px; transition: transform .2s, background .2s; }
+.cow-image-wrap { position: relative; width: min(82%, 720px); aspect-ratio: 900 / 560; }
+.cow-big { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 14px 8px rgba(48,51,47,.14)); user-select: none; }
+.hotspot { position: absolute; width: 42px; height: 42px; margin: 0; padding: 0; transform: translate(-50%,-50%); border: 3px solid var(--white); border-radius: 50%; background: var(--green); color: white; cursor: pointer; box-shadow: 0 5px 16px rgba(36,72,58,.25); font-size: 11px; transition: transform .2s, background .2s; z-index: 2; }
 .hotspot span { position: absolute; left: 35px; top: 7px; white-space: nowrap; background: var(--white); color: var(--green); padding: 4px 8px; border-radius: 7px; font-size: .75rem; font-weight: 700; opacity: 0; pointer-events: none; transition: opacity .2s; }
-.hotspot:hover, .hotspot:focus { transform: scale(1.15); background: var(--brown); }
+.hotspot:hover, .hotspot:focus { transform: translate(-50%,-50%) scale(1.15); background: var(--brown); }
 .hotspot:hover span, .hotspot:focus span { opacity: 1; }
-.hotspot-eye { top: 52%; left: 30%; }
-.hotspot-ear { top: 42%; left: 16%; }
-.hotspot-mouth { top: 60%; left: 27%; }
-.hotspot-belly { top: 55%; left: 60%; }
-.hotspot-hoof { top: 85%; left: 78%; }
-.hotspot-udder { top: 74%; left: 58%; }
+
+/* Posities zijn gebaseerd op de coördinaten van cow.svg (900 x 560). */
+.hotspot-ear { left: 18.3%; top: 43.8%; }
+.hotspot-eye { left: 23.9%; top: 56.3%; }
+.hotspot-mouth { left: 27.8%; top: 63.6%; }
+.hotspot-belly { left: 60%; top: 60.7%; }
+.hotspot-udder { left: 57.3%; top: 75.7%; }
+.hotspot-hoof { left: 76.7%; top: 87.1%; }
+
 .anatomy-info { display: flex; flex-direction: column; justify-content: center; padding: 35px; background: var(--white); border-radius: 26px; box-shadow: var(--shadow); }
 .info-tag { width: fit-content; padding: 5px 9px; border-radius: 99px; background: var(--green-light); color: var(--green); font-size: .75rem; font-weight: 800; }
 .anatomy-info h3 { color: var(--green); font-size: 1.8rem; margin: 15px 0 8px; }
@@ -82,4 +86,5 @@ footer strong { color: white; }
 @media (max-width: 800px) {
   .anatomy-layout { grid-template-columns: 1fr; }
   .interactive-cow { min-height: 320px; }
+  .cow-image-wrap { width: min(92%, 720px); }
 }
