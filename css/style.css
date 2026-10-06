@@ -68,12 +68,12 @@ footer strong { color: white; }
 .hotspot span { position: absolute; left: 35px; top: 7px; white-space: nowrap; background: var(--white); color: var(--green); padding: 4px 8px; border-radius: 7px; font-size: .75rem; font-weight: 700; opacity: 0; pointer-events: none; transition: opacity .2s; }
 .hotspot:hover, .hotspot:focus { transform: scale(1.15); background: var(--brown); }
 .hotspot:hover span, .hotspot:focus span { opacity: 1; }
-.hotspot-eye { top: 34%; left: 31%; }
-.hotspot-ear { top: 25%; left: 25%; }
-.hotspot-mouth { top: 48%; left: 23%; }
-.hotspot-belly { top: 59%; left: 55%; }
-.hotspot-hoof { bottom: 14%; left: 64%; }
-.hotspot-udder { bottom: 28%; left: 48%; }
+.hotspot-eye { top: 52%; left: 30%; }
+.hotspot-ear { top: 42%; left: 16%; }
+.hotspot-mouth { top: 60%; left: 27%; }
+.hotspot-belly { top: 55%; left: 60%; }
+.hotspot-hoof { top: 85%; left: 78%; }
+.hotspot-udder { top: 74%; left: 58%; }
 .anatomy-info { display: flex; flex-direction: column; justify-content: center; padding: 35px; background: var(--white); border-radius: 26px; box-shadow: var(--shadow); }
 .info-tag { width: fit-content; padding: 5px 9px; border-radius: 99px; background: var(--green-light); color: var(--green); font-size: .75rem; font-weight: 800; }
 .anatomy-info h3 { color: var(--green); font-size: 1.8rem; margin: 15px 0 8px; }
