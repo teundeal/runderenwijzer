@@ -189,3 +189,13 @@ body.edit-mode main .growth-info span {
   }
   #editorStatus { width: 100%; }
 }
+
+
+body.edit-mode .editable-image {
+  outline: 3px dashed rgba(138,104,78,.7);
+  outline-offset: 5px;
+  cursor: pointer;
+}
+body.edit-mode .editable-image:hover {
+  filter: brightness(.97) drop-shadow(0 14px 8px rgba(48,51,47,.18));
+}
