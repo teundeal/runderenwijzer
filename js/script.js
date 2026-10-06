@@ -238,6 +238,162 @@ function createEditorUI() {
   }
 }
 
+
+function imageStorageKey(index) {
+  return editStoragePrefix + activePageKey + ":image:" + index;
+}
+
+function getEditableImages() {
+  return Array.from(document.querySelectorAll("main img")).filter(img => !img.closest(".hotspot"));
+}
+
+function loadImageEdits() {
+  const images = getEditableImages();
+  images.forEach((img, index) => {
+    const saved = localStorage.getItem(imageStorageKey(index));
+    if (saved) img.src = saved;
+  });
+}
+
+function openImagePicker(img, index) {
+  const input = document.getElementById("imageFileInput");
+  if (!input) return;
+  input.dataset.index = String(index);
+  input.dataset.target = img.dataset.editImageTarget || "";
+  input.value = "";
+  input.click();
+}
+
+function compressImage(file, maxSize = 1600, quality = 0.82) {
+  return new Promise((resolve, reject) => {
+    if (!file || !file.type.startsWith("image/")) {
+      reject(new Error("Kies een afbeeldingsbestand."));
+      return;
+    }
+    const reader = new FileReader();
+    reader.onerror = () => reject(new Error("Afbeelding kon niet worden gelezen."));
+    reader.onload = () => {
+      const image = new Image();
+      image.onerror = () => reject(new Error("Afbeelding kon niet worden geopend."));
+      image.onload = () => {
+        let { width, height } = image;
+        const scale = Math.min(1, maxSize / Math.max(width, height));
+        width = Math.max(1, Math.round(width * scale));
+        height = Math.max(1, Math.round(height * scale));
+
+        const canvas = document.createElement("canvas");
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(image, 0, 0, width, height);
+        resolve(canvas.toDataURL("image/jpeg", quality));
+      };
+      image.src = reader.result;
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+async function handleImageFile(file, index) {
+  const images = getEditableImages();
+  const img = images[index];
+  if (!img) return;
+
+  try {
+    const dataUrl = await compressImage(file);
+    localStorage.setItem(imageStorageKey(index), dataUrl);
+    img.src = dataUrl;
+    img.dataset.localImage = "1";
+    const status = document.getElementById("editorStatus");
+    if (status) status.textContent = "Afbeelding aangepast en op deze computer opgeslagen.";
+  } catch (error) {
+    window.alert(error.message || "Afbeelding kon niet worden aangepast.");
+  }
+}
+
+function resetImageEdits() {
+  getEditableImages().forEach((img, index) => {
+    localStorage.removeItem(imageStorageKey(index));
+  });
+  location.reload();
+}
+
+function enableImageEditing() {
+  const images = getEditableImages();
+  images.forEach((img, index) => {
+    img.classList.toggle("editable-image", editMode);
+    if (!img.dataset.editImageTarget) img.dataset.editImageTarget = String(index);
+    if (!img.dataset.imageEditBound) {
+      img.addEventListener("click", () => {
+        if (!editMode) return;
+        openImagePicker(img, index);
+      });
+      img.dataset.imageEditBound = "1";
+    }
+  });
+}
+
+const originalSetEditState = setEditState;
+setEditState = function(on) {
+  originalSetEditState(on);
+  enableImageEditing();
+};
+
+loadImageEdits();
+enableImageEditing();
+
+const originalCreateEditorUI = createEditorUI;
+createEditorUI = function() {
+  originalCreateEditorUI();
+  if (document.getElementById("imageFileInput")) return;
+
+  const input = document.createElement("input");
+  input.type = "file";
+  input.accept = "image/*";
+  input.id = "imageFileInput";
+  input.hidden = true;
+  document.body.appendChild(input);
+
+  input.addEventListener("change", async () => {
+    const file = input.files?.[0];
+    if (!file) return;
+    const index = Number(input.dataset.index);
+    await handleImageFile(file, index);
+  });
+
+  const toolbar = document.getElementById("editorToolbar");
+  if (toolbar) {
+    const imageBtn = document.createElement("button");
+    imageBtn.type = "button";
+    imageBtn.dataset.action = "pick-image";
+    imageBtn.textContent = "Afbeelding kiezen";
+    toolbar.insertBefore(imageBtn, toolbar.querySelector('[data-action="reset"]'));
+
+    imageBtn.addEventListener("click", () => {
+      if (!editMode) {
+        window.alert("Klik eerst op 'Bewerken'.");
+        return;
+      }
+      const images = getEditableImages();
+      if (images.length === 0) {
+        window.alert("Op deze pagina staan geen bewerkbare afbeeldingen.");
+        return;
+      }
+      window.alert("Klik op de afbeelding die je wilt vervangen en kies daarna een nieuw bestand.");
+    });
+
+    const resetImagesBtn = document.createElement("button");
+    resetImagesBtn.type = "button";
+    resetImagesBtn.textContent = "Wis afbeeldingen";
+    toolbar.insertBefore(resetImagesBtn, toolbar.querySelector('[data-action="reset"]'));
+    resetImagesBtn.addEventListener("click", () => {
+      if (window.confirm("Wil je jouw eigen afbeeldingswijzigingen op deze pagina wissen?")) {
+        resetImageEdits();
+      }
+    });
+  }
+}
+
 loadPageEdits();
 createEditorUI();
 
