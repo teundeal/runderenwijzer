@@ -1,484 +1,179 @@
 const stages = [
-  { title: "Kalf", text: "0 tot 6 maanden · jong rund", image: "images/kalf.jpg.png", size: "scale(.88)" },
-  { title: "Pink", text: "6 tot ongeveer 18 maanden · vrouwelijk rund dat nog niet heeft gekalfd", image: "images/pink.jpg.png", size: "scale(.96)" },
-  { title: "Vaars", text: "Ongeveer 15 tot 24 maanden · vrouwelijk rund tot de eerste kalving", image: "images/vaars.jpg.png", size: "scale(1)" },
-  { title: "Koe", text: "Volwassen vrouwelijk rund na het eerste kalf", image: "images/koe.jpg.png", size: "scale(1.05)" }
+  {title:"Kalf",text:"0 tot 6 maanden · jong rund",image:"images/kalf.jpg.png",size:"scale(.88)"},
+  {title:"Pink",text:"6 tot ongeveer 18 maanden · vrouwelijk rund dat nog niet heeft gekalfd",image:"images/pink.jpg.png",size:"scale(.96)"},
+  {title:"Vaars",text:"Ongeveer 15 tot 24 maanden · vrouwelijk rund tot de eerste kalving",image:"images/vaars.jpg.png",size:"scale(1)"},
+  {title:"Koe",text:"Volwassen vrouwelijk rund na het eerste kalf",image:"images/koe.jpg.png",size:"scale(1.05)"}
 ];
 
-const cow = document.getElementById("cowIllustration");
-const title = document.getElementById("growthTitle");
-const description = document.getElementById("growthText");
-const number = document.getElementById("growthNumber");
-const fill = document.getElementById("growthFill");
+const editPrefix="runderenwijzer-page-v2:";
+const pageKey=location.pathname.replace(/\/+$/,"")||"/";
 
-if (cow && title && description && number && fill) {
-  let stage = 0;
-
-  function showStage() {
-    const current = stages[stage];
+const cow=document.getElementById("cowIllustration");
+if(cow){
+  const title=document.getElementById("growthTitle");
+  const description=document.getElementById("growthText");
+  const number=document.getElementById("growthNumber");
+  const fill=document.getElementById("growthFill");
+  let stage=0;
+  function showStage(){
+    const s=stages[stage];
     cow.classList.add("is-changing");
-    window.setTimeout(() => {
-      cow.src = current.image;
-      cow.alt = current.title;
-      cow.style.transform = current.size;
-      title.textContent = current.title;
-      description.textContent = current.text;
-      number.textContent = (stage + 1) + " / " + stages.length;
-      fill.style.width = ((stage + 1) / stages.length * 100) + "%";
+    setTimeout(()=>{
+      cow.src=s.image;
+      cow.alt=s.title;
+      cow.style.transform=s.size;
+      if(title)title.textContent=s.title;
+      if(description)description.textContent=s.text;
+      if(number)number.textContent=(stage+1)+" / "+stages.length;
+      if(fill)fill.style.width=((stage+1)/stages.length*100)+"%";
       cow.classList.remove("is-changing");
-    }, 180);
+    },180);
   }
-
-  cow.addEventListener("error", () => {
-    cow.alt = "Afbeelding ontbreekt: " + stages[stage].image;
-  });
-
-  window.setInterval(() => {
-    stage = (stage + 1) % stages.length;
-    showStage();
-  }, 4000);
-
+  setInterval(()=>{stage=(stage+1)%stages.length;showStage();},4000);
   showStage();
 }
 
-const anatomyData = {
-  oog: { title: "Het oog", text: "Met de ogen kan een rund zijn omgeving waarnemen. Zicht speelt onder andere een rol bij het herkennen van beweging en andere dieren.", link: "anatomie.html" },
-  oor: { title: "Het oor", text: "Runderen hebben een goed gehoor en kunnen hun oren onafhankelijk van elkaar bewegen. Oorstand en beweging kunnen ook iets zeggen over gedrag.", link: "gedrag.html" },
-  mond: { title: "De mond", text: "Een rund gebruikt de mond om voer op te nemen. Met de tong en tanden wordt het voer verwerkt voordat het verder door het spijsverteringsstelsel gaat.", link: "voeding.html" },
-  buik: { title: "De buik", text: "In de buik bevinden zich de vier magen van een rund. Hierdoor kan een rund plantaardig voer goed benutten en herkauwen.", link: "voeding.html" },
-  poot: { title: "De poot en klauw", text: "Sterke en gezonde klauwen zijn belangrijk voor beweging en welzijn. Regelmatige controle helpt problemen vroeg te herkennen.", link: "gezondheid.html" },
-  uier: { title: "De uier", text: "Bij een melkkoe bestaat de uier uit vier kwartieren. Een goede uiergezondheid is belangrijk voor het welzijn van de koe en de melkproductie.", link: "gezondheid.html" }
+const anatomyData={
+  oog:{title:"Het oog",text:"Met de ogen kan een rund zijn omgeving waarnemen. Zicht speelt onder andere een rol bij het herkennen van beweging en andere dieren.",link:"anatomie.html"},
+  oor:{title:"Het oor",text:"Runderen hebben een goed gehoor en kunnen hun oren onafhankelijk van elkaar bewegen. Oorstand en beweging kunnen ook iets zeggen over gedrag.",link:"gedrag.html"},
+  mond:{title:"De mond",text:"Een rund gebruikt de mond om voer op te nemen. Met de tong en tanden wordt het voer verwerkt voordat het verder door het spijsverteringsstelsel gaat.",link:"voeding.html"},
+  buik:{title:"De buik",text:"In de buik bevinden zich de vier magen van een rund. Hierdoor kan een rund plantaardig voer goed benutten en herkauwen.",link:"voeding.html"},
+  poot:{title:"De poot en klauw",text:"Sterke en gezonde klauwen zijn belangrijk voor beweging en welzijn. Regelmatige controle helpt problemen vroeg te herkennen.",link:"gezondheid.html"},
+  uier:{title:"De uier",text:"Bij een melkkoe bestaat de uier uit vier kwartieren. Een goede uiergezondheid is belangrijk voor het welzijn van de koe en de melkproductie.",link:"gezondheid.html"}
 };
 
-const anatomyStorageKey = "runderenwijzer-hotspots-v1";
-function loadAnatomyData() {
-  try {
-    const saved = JSON.parse(localStorage.getItem(anatomyStorageKey) || "{}");
-    Object.keys(saved).forEach(key => {
-      if (anatomyData[key]) anatomyData[key] = { ...anatomyData[key], ...saved[key] };
-    });
-  } catch (e) {}
+const anatomySaved=JSON.parse(localStorage.getItem(editPrefix+"hotspots")||"{}");
+Object.keys(anatomySaved).forEach(k=>{if(anatomyData[k])anatomyData[k]={...anatomyData[k],...anatomySaved[k]};});
+
+function showPart(key){
+  const d=anatomyData[key]; if(!d)return;
+  const t=document.getElementById("partTitle"),p=document.getElementById("partText"),l=document.getElementById("partLink"),tag=document.querySelector(".info-tag");
+  if(t)t.textContent=d.title;
+  if(p)p.textContent=d.text;
+  if(l)l.href=d.link;
+  if(tag)tag.textContent="Geselecteerd";
 }
-loadAnatomyData();
-
-function showAnatomyPart(key) {
-  const data = anatomyData[key];
-  if (!data) return;
-  const partTitle = document.getElementById("partTitle");
-  const partText = document.getElementById("partText");
-  const partLink = document.getElementById("partLink");
-  const infoTag = document.querySelector(".info-tag");
-  if (partTitle) partTitle.textContent = data.title;
-  if (partText) partText.textContent = data.text;
-  if (partLink) partLink.href = data.link;
-  if (infoTag) infoTag.textContent = "Geselecteerd";
-}
-
-document.querySelectorAll(".hotspot").forEach(button => {
-  button.addEventListener("click", () => {
-    const key = button.dataset.part;
-    showAnatomyPart(key);
-    if (document.body.classList.contains("edit-mode")) {
-      openHotspotEditor(key);
-    }
-  });
-});
-
-const editStoragePrefix = "runderenwijzer-page-v1:";
-let editableElements = [];
-let originalHTML = new Map();
-let editMode = false;
-let activePageKey = location.pathname.replace(/\/+$/, "") || "/";
-
-function getEditableElements() {
-  return Array.from(document.querySelectorAll(
-    "main h1, main h2, main h3, main p, main .growth-info strong, main .growth-info span"
-  )).filter(el => !el.closest(".button") && !el.closest(".hotspot"));
-}
-
-function storageKeyFor(index) {
-  return editStoragePrefix + activePageKey + ":" + index;
-}
-
-function loadPageEdits() {
-  editableElements = getEditableElements();
-  editableElements.forEach((el, index) => {
-    const saved = localStorage.getItem(storageKeyFor(index));
-    if (saved !== null) el.innerHTML = saved;
-  });
-}
-
-function setEditState(on) {
-  editMode = on;
-  document.body.classList.toggle("edit-mode", on);
-  editableElements.forEach(el => {
-    el.contentEditable = on ? "true" : "false";
-    el.spellcheck = on;
-  });
-  const toolbar = document.getElementById("editorToolbar");
-  const status = document.getElementById("editorStatus");
-  if (toolbar) toolbar.classList.toggle("editing", on);
-  if (status) status.textContent = on
-    ? "Je kunt nu op de tekst klikken en typen."
-    : "Wijzigingen worden op deze computer opgeslagen.";
-}
-
-function savePageEdits() {
-  editableElements.forEach((el, index) => {
-    localStorage.setItem(storageKeyFor(index), el.innerHTML);
-  });
-  localStorage.setItem(editStoragePrefix + activePageKey + ":saved", "1");
-}
-
-function cancelPageEdits() {
-  editableElements.forEach(el => {
-    const original = originalHTML.get(el);
-    if (original !== undefined) el.innerHTML = original;
-  });
-}
-
-function resetPageEdits() {
-  editableElements.forEach((el, index) => {
-    localStorage.removeItem(storageKeyFor(index));
-  });
-  location.reload();
-}
-
-function openHotspotEditor(key) {
-  const data = anatomyData[key];
-  if (!data) return;
-  const panel = document.getElementById("hotspotEditor");
-  if (!panel) return;
-  panel.dataset.key = key;
-  panel.querySelector("[data-editor-title]").value = data.title;
-  panel.querySelector("[data-editor-text]").value = data.text;
-  panel.querySelector("[data-editor-link]").value = data.link;
+function openHotspotEditor(key){
+  const d=anatomyData[key],panel=document.getElementById("hotspotEditor"); if(!d||!panel)return;
+  panel.dataset.key=key;
+  panel.querySelector("[data-editor-title]").value=d.title;
+  panel.querySelector("[data-editor-text]").value=d.text;
+  panel.querySelector("[data-editor-link]").value=d.link;
   panel.classList.add("visible");
 }
 
-function saveHotspotEditor() {
-  const panel = document.getElementById("hotspotEditor");
-  if (!panel) return;
-  const key = panel.dataset.key;
-  if (!anatomyData[key]) return;
-  anatomyData[key].title = panel.querySelector("[data-editor-title]").value.trim() || anatomyData[key].title;
-  anatomyData[key].text = panel.querySelector("[data-editor-text]").value.trim() || anatomyData[key].text;
-  anatomyData[key].link = panel.querySelector("[data-editor-link]").value.trim() || anatomyData[key].link;
-  const saved = JSON.parse(localStorage.getItem(anatomyStorageKey) || "{}");
-  saved[key] = anatomyData[key];
-  localStorage.setItem(anatomyStorageKey, JSON.stringify(saved));
-  showAnatomyPart(key);
-  panel.classList.remove("visible");
+document.querySelectorAll(".hotspot").forEach(btn=>btn.addEventListener("click",()=>{
+  showPart(btn.dataset.part);
+  if(document.body.classList.contains("edit-mode"))openHotspotEditor(btn.dataset.part);
+}));
+
+let editMode=false;
+let editable=[];
+
+function pageEditKey(i){return editPrefix+"text:"+pageKey+":"+i;}
+function collectEditable(){
+  return [...document.querySelectorAll("main h1,main h2,main h3,main p,main .growth-info strong,main .growth-info span")]
+    .filter(el=>!el.closest(".button")&&!el.closest(".hotspot"));
 }
-
-function createEditorUI() {
-  if (document.getElementById("editorToolbar")) return;
-
-  const toolbar = document.createElement("div");
-  toolbar.id = "editorToolbar";
-  toolbar.innerHTML = `
-    <button type="button" class="editor-main-btn" data-action="toggle">✎ Bewerken</button>
-    <span id="editorStatus">Wijzigingen worden op deze computer opgeslagen.</span>
-    <button type="button" data-action="save" hidden>Opslaan</button>
-    <button type="button" data-action="cancel" hidden>Annuleren</button>
-    <button type="button" data-action="reset">Wis mijn wijzigingen</button>
-  `;
-  document.body.appendChild(toolbar);
-
-  toolbar.addEventListener("click", event => {
-    const action = event.target.closest("button")?.dataset.action;
-    if (!action) return;
-    if (action === "toggle") {
-      if (editMode) {
-        savePageEdits();
-        setEditState(false);
-      } else {
-        originalHTML = new Map(editableElements.map(el => [el, el.innerHTML]));
-        setEditState(true);
-      }
-      const toggle = toolbar.querySelector('[data-action="toggle"]');
-      if (toggle) toggle.textContent = editMode ? "✓ Bewerkmodus aan" : "✎ Bewerken";
-      toolbar.querySelector('[data-action="save"]').hidden = !editMode;
-      toolbar.querySelector('[data-action="cancel"]').hidden = !editMode;
-    }
-    if (action === "save") {
-      savePageEdits();
-      setEditState(false);
-      toolbar.querySelector('[data-action="toggle"]').textContent = "✎ Bewerken";
-      toolbar.querySelector('[data-action="save"]').hidden = true;
-      toolbar.querySelector('[data-action="cancel"]').hidden = true;
-    }
-    if (action === "cancel") {
-      cancelPageEdits();
-      setEditState(false);
-      toolbar.querySelector('[data-action="toggle"]').textContent = "✎ Bewerken";
-      toolbar.querySelector('[data-action="save"]').hidden = true;
-      toolbar.querySelector('[data-action="cancel"]').hidden = true;
-    }
-    if (action === "reset") {
-      if (window.confirm("Wil je jouw eigen wijzigingen op deze pagina wissen?")) resetPageEdits();
-    }
-  });
-
-  if (document.querySelector(".hotspot")) {
-    const panel = document.createElement("div");
-    panel.id = "hotspotEditor";
-    panel.innerHTML = `
-      <div class="hotspot-editor-box">
-        <button type="button" class="hotspot-editor-close" aria-label="Sluiten">×</button>
-        <h3>Lichaamsdeel bewerken</h3>
-        <label>Titel<input type="text" data-editor-title></label>
-        <label>Uitleg<textarea rows="6" data-editor-text></textarea></label>
-        <label>Link<input type="text" data-editor-link></label>
-        <button type="button" class="button" data-editor-save>Opslaan</button>
-      </div>`;
-    document.body.appendChild(panel);
-    panel.querySelector(".hotspot-editor-close").addEventListener("click", () => panel.classList.remove("visible"));
-    panel.querySelector("[data-editor-save]").addEventListener("click", saveHotspotEditor);
-  }
-}
-
-
-function imageStorageKey(index) {
-  return editStoragePrefix + activePageKey + ":image:" + index;
-}
-
-function getEditableImages() {
-  return Array.from(document.querySelectorAll("main img")).filter(img => !img.closest(".hotspot"));
-}
-
-function loadImageEdits() {
-  const images = getEditableImages();
-  images.forEach((img, index) => {
-    const saved = localStorage.getItem(imageStorageKey(index));
-    if (saved) img.src = saved;
+function loadTextEdits(){
+  editable=collectEditable();
+  editable.forEach((el,i)=>{
+    const saved=localStorage.getItem(pageEditKey(i));
+    if(saved!==null)el.innerHTML=saved;
   });
 }
+function saveTextEdits(){editable.forEach((el,i)=>localStorage.setItem(pageEditKey(i),el.innerHTML));}
+function clearTextEdits(){editable.forEach((el,i)=>localStorage.removeItem(pageEditKey(i)));}
 
-function openImagePicker(img, index) {
-  const input = document.getElementById("imageFileInput");
-  if (!input) return;
-  input.dataset.addNew = "0";
-  input.dataset.index = String(index);
-  input.dataset.target = img.dataset.editImageTarget || "";
-  input.value = "";
+function imageKey(i){return editPrefix+"image:"+pageKey+":"+i;}
+function images(){return [...document.querySelectorAll("main img")].filter(img=>!img.closest(".hotspot"));}
+
+function loadImageEdits(){images().forEach((img,i)=>{const saved=localStorage.getItem(imageKey(i));if(saved)img.src=saved;});}
+
+function pickImage(i){
+  const input=document.getElementById("imageFileInput"); if(!input)return;
+  input.dataset.index=i;
+  input.value="";
   input.click();
 }
-
-function compressImage(file, maxSize = 1600, quality = 0.82) {
-  return new Promise((resolve, reject) => {
-    if (!file || !file.type.startsWith("image/")) {
-      reject(new Error("Kies een afbeeldingsbestand."));
-      return;
-    }
-    const reader = new FileReader();
-    reader.onerror = () => reject(new Error("Afbeelding kon niet worden gelezen."));
-    reader.onload = () => {
-      const image = new Image();
-      image.onerror = () => reject(new Error("Afbeelding kon niet worden geopend."));
-      image.onload = () => {
-        let { width, height } = image;
-        const scale = Math.min(1, maxSize / Math.max(width, height));
-        width = Math.max(1, Math.round(width * scale));
-        height = Math.max(1, Math.round(height * scale));
-
-        const canvas = document.createElement("canvas");
-        canvas.width = width;
-        canvas.height = height;
-        const ctx = canvas.getContext("2d");
-        ctx.drawImage(image, 0, 0, width, height);
-        resolve(canvas.toDataURL("image/jpeg", quality));
-      };
-      image.src = reader.result;
-    };
-    reader.readAsDataURL(file);
+function fileToDataURL(file){
+  return new Promise((resolve,reject)=>{
+    const r=new FileReader();
+    r.onload=()=>resolve(r.result);
+    r.onerror=()=>reject(new Error("Afbeelding kon niet worden gelezen."));
+    r.readAsDataURL(file);
   });
 }
+document.addEventListener("change",async e=>{
+  if(e.target.id!=="imageFileInput")return;
+  const file=e.target.files&&e.target.files[0]; if(!file)return;
+  const i=Number(e.target.dataset.index);
+  try{
+    const data=await fileToDataURL(file);
+    localStorage.setItem(imageKey(i),data);
+    const img=images()[i]; if(img)img.src=data;
+    const status=document.getElementById("editorStatus");if(status)status.textContent="Afbeelding aangepast en opgeslagen op deze computer.";
+  }catch(err){alert(err.message);}
+});
 
-async function handleImageFile(file, index) {
-  try {
-    const dataUrl = await compressImage(file);
-
-    if (index === null || index === undefined || Number.isNaN(index)) {
-      const images = getAddedImages();
-      images.push({ src: dataUrl, caption: file.name.replace(/\.[^.]+$/, "") });
-      saveAddedImages(images);
-      renderAddedImages();
-      const status = document.getElementById("editorStatus");
-      if (status) status.textContent = "Nieuwe afbeelding toegevoegd en op deze computer opgeslagen.";
-      return;
-    }
-
-    const images = getEditableImages();
-    const img = images[index];
-    if (!img) return;
-    localStorage.setItem(imageStorageKey(index), dataUrl);
-    img.src = dataUrl;
-    img.dataset.localImage = "1";
-    const status = document.getElementById("editorStatus");
-    if (status) status.textContent = "Afbeelding aangepast en op deze computer opgeslagen.";
-  } catch (error) {
-    window.alert(error.message || "Afbeelding kon niet worden aangepast.");
-  }
-}
-
-
-function getAddedImages() {
-  try {
-    return JSON.parse(localStorage.getItem(editStoragePrefix + activePageKey + ":added-images") || "[]");
-  } catch (e) {
-    return [];
-  }
-}
-
-function saveAddedImages(images) {
-  localStorage.setItem(editStoragePrefix + activePageKey + ":added-images", JSON.stringify(images));
-}
-
-function renderAddedImages() {
-  const main = document.querySelector("main");
-  if (!main) return;
-  let gallery = document.getElementById("userAddedImages");
-  if (!gallery) {
-    gallery = document.createElement("section");
-    gallery.id = "userAddedImages";
-    gallery.className = "user-added-images";
-    const intro = document.createElement("div");
-    intro.className = "section-heading";
-    intro.innerHTML = '<p class="eyebrow">Mijn foto's</p><h2>Eigen beeldmateriaal</h2><p>Hier komen afbeeldingen die je zelf aan de website hebt toegevoegd.</p>';
-    gallery.appendChild(intro);
-    main.appendChild(gallery);
-  }
-
-  gallery.querySelectorAll(".user-image-item").forEach(el => el.remove());
-
-  getAddedImages().forEach((item, index) => {
-    const block = document.createElement("article");
-    block.className = "user-image-item";
-    const img = document.createElement("img");
-    img.src = item.src;
-    img.alt = item.caption || "Eigen afbeelding";
-    img.className = "user-added-image";
-    const caption = document.createElement("p");
-    caption.textContent = item.caption || "Eigen afbeelding";
-    block.appendChild(img);
-    block.appendChild(caption);
-    gallery.appendChild(block);
-  });
-}
-
-async function addNewImage() {
-  const input = document.getElementById("imageFileInput");
-  if (!input) return;
-  input.dataset.addNew = "1";
-  input.dataset.index = "";
-  input.value = "";
-  input.click();
-}
-
-function resetImageEdits() {
-  getEditableImages().forEach((img, index) => {
-    localStorage.removeItem(imageStorageKey(index));
-  });
-  localStorage.removeItem(editStoragePrefix + activePageKey + ":added-images");
-  location.reload();
-}
-
-function enableImageEditing() {
-  const images = getEditableImages();
-  images.forEach((img, index) => {
-    img.classList.toggle("editable-image", editMode);
-    if (!img.dataset.editImageTarget) img.dataset.editImageTarget = String(index);
-    if (!img.dataset.imageEditBound) {
-      img.addEventListener("click", () => {
-        if (!editMode) return;
-        openImagePicker(img, index);
-      });
-      img.dataset.imageEditBound = "1";
+function setEditMode(on){
+  editMode=on;
+  document.body.classList.toggle("edit-mode",on);
+  editable.forEach(el=>el.contentEditable=on?"true":"false");
+  images().forEach((img,i)=>{
+    img.classList.toggle("editable-image",on);
+    if(on&&!img.dataset.bound){
+      img.addEventListener("click",e=>{e.preventDefault();pickImage(i);});
+      img.dataset.bound="1";
     }
   });
+  const status=document.getElementById("editorStatus");
+  if(status)status.textContent=on?"Klik op tekst om te typen. Klik op een afbeelding om die te vervangen.":"Wijzigingen worden op deze computer opgeslagen.";
 }
 
-const originalSetEditState = setEditState;
-setEditState = function(on) {
-  originalSetEditState(on);
-  enableImageEditing();
-};
+function buildEditor(){
+  if(document.getElementById("editorToolbar"))return;
+  const bar=document.createElement("div");
+  bar.id="editorToolbar";
+  bar.innerHTML='<button class="editor-main-btn" data-a="toggle">✎ Bewerken</button><span id="editorStatus">Wijzigingen worden op deze computer opgeslagen.</span><button data-a="save">Opslaan</button><button data-a="reset">Wis mijn wijzigingen</button>';
+  document.body.appendChild(bar);
 
-loadImageEdits();
-enableImageEditing();
-
-const originalCreateEditorUI = createEditorUI;
-createEditorUI = function() {
-  originalCreateEditorUI();
-  if (document.getElementById("imageFileInput")) return;
-
-  const input = document.createElement("input");
-  input.type = "file";
-  input.accept = "image/*";
-  input.id = "imageFileInput";
-  input.hidden = true;
+  const input=document.createElement("input");
+  input.type="file"; input.accept="image/*"; input.id="imageFileInput"; input.hidden=true;
   document.body.appendChild(input);
 
-  input.addEventListener("change", async () => {
-    const file = input.files?.[0];
-    if (!file) return;
-    if (input.dataset.addNew === "1") {
-      await handleImageFile(file, null);
-    } else {
-      const index = Number(input.dataset.index);
-      await handleImageFile(file, index);
+  bar.addEventListener("click",e=>{
+    const a=e.target.closest("button")?.dataset.a;if(!a)return;
+    if(a==="toggle"){
+      setEditMode(!editMode);
+      e.target.textContent=editMode?"✓ Bewerken aan":"✎ Bewerken";
     }
-    input.dataset.addNew = "0";
+    if(a==="save"){
+      saveTextEdits();
+      setEditMode(false);
+      bar.querySelector('[data-a="toggle"]').textContent="✎ Bewerken";
+    }
+    if(a==="reset"){
+      if(confirm("Wil je jouw wijzigingen op deze pagina wissen?")){clearTextEdits();Object.keys(localStorage).filter(k=>k.startsWith(editPrefix+"image:"+pageKey+":")).forEach(k=>localStorage.removeItem(k));location.reload();}
+    }
   });
 
-  renderAddedImages();
-
-  const toolbar = document.getElementById("editorToolbar");
-  if (toolbar) {
-    const imageBtn = document.createElement("button");
-    imageBtn.type = "button";
-    imageBtn.dataset.action = "pick-image";
-    imageBtn.textContent = "Afbeelding kiezen";
-    toolbar.insertBefore(imageBtn, toolbar.querySelector('[data-action="reset"]'));
-
-    imageBtn.addEventListener("click", () => {
-      if (!editMode) {
-        window.alert("Klik eerst op 'Bewerken'.");
-        return;
-      }
-      const images = getEditableImages();
-      if (images.length === 0) {
-        window.alert("Op deze pagina staan geen bewerkbare afbeeldingen.");
-        return;
-      }
-      window.alert("Klik op de afbeelding die je wilt vervangen en kies daarna een nieuw bestand.");
-    });
-
-    const addImageBtn = document.createElement("button");
-    addImageBtn.type = "button";
-    addImageBtn.textContent = "Nieuwe afbeelding";
-    toolbar.insertBefore(addImageBtn, toolbar.querySelector('[data-action="reset"]'));
-    addImageBtn.addEventListener("click", () => {
-      if (!editMode) {
-        window.alert("Klik eerst op 'Bewerken'.");
-        return;
-      }
-      addNewImage();
-    });
-
-    const resetImagesBtn = document.createElement("button");
-    resetImagesBtn.type = "button";
-    resetImagesBtn.textContent = "Wis afbeeldingen";
-    toolbar.insertBefore(resetImagesBtn, toolbar.querySelector('[data-action="reset"]'));
-    resetImagesBtn.addEventListener("click", () => {
-      if (window.confirm("Wil je jouw eigen afbeeldingswijzigingen op deze pagina wissen?")) {
-        resetImageEdits();
-      }
-    });
+  if(document.querySelector(".hotspot")){
+    const panel=document.createElement("div");
+    panel.id="hotspotEditor";
+    panel.innerHTML='<div class="hotspot-editor-box"><button type="button" class="hotspot-editor-close">×</button><h3>Lichaamsdeel bewerken</h3><label>Titel<input data-editor-title></label><label>Uitleg<textarea rows="6" data-editor-text></textarea></label><label>Link<input data-editor-link></label><button type="button" class="button" data-editor-save>Opslaan</button></div>';
+    document.body.appendChild(panel);
+    panel.querySelector(".hotspot-editor-close").onclick=()=>panel.classList.remove("visible");
+    panel.querySelector("[data-editor-save]").onclick=()=>{
+      const k=panel.dataset.key;if(!k)return;
+      anatomyData[k]={title:panel.querySelector("[data-editor-title]").value,text:panel.querySelector("[data-editor-text]").value,link:panel.querySelector("[data-editor-link]").value};
+      localStorage.setItem(editPrefix+"hotspots",JSON.stringify(anatomyData));
+      showPart(k);panel.classList.remove("visible");
+    };
   }
 }
 
-loadPageEdits();
-createEditorUI();
-
+loadTextEdits();
+loadImageEdits();
+buildEditor();
+setEditMode(false);
