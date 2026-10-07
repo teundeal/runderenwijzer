@@ -230,3 +230,9 @@ body.edit-mode .editable-image:hover {
   color: var(--green);
   font-weight: 700;
 }
+
+.user-added-images{padding:30px 5% 70px}
+.user-images-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px}
+.user-image-item{background:var(--white);border-radius:18px;padding:12px;box-shadow:0 5px 20px rgba(36,72,58,.07)}
+.user-added-image{display:block;width:100%;max-height:320px;object-fit:contain;border-radius:12px;background:var(--green-light)}
+.user-image-item p{margin:10px 4px 2px;color:var(--green);font-weight:700}
