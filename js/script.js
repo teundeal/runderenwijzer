@@ -85,7 +85,31 @@ function loadTextEdits(){
 function saveTextEdits(){editable.forEach((el,i)=>localStorage.setItem(pageEditKey(i),el.innerHTML));}
 function clearTextEdits(){editable.forEach((el,i)=>localStorage.removeItem(pageEditKey(i)));}
 
-function imageKey(i){return editPrefix+"image:"+pageKey+":"+i;}
+const addedImagesKey=editPrefix+"added:"+pageKey;
+function getAddedImages(){try{return JSON.parse(localStorage.getItem(addedImagesKey)||"[]")}catch(e){return []}}
+function saveAddedImages(list){localStorage.setItem(addedImagesKey,JSON.stringify(list))}
+function renderAddedImages(){
+  let sec=document.getElementById("userAddedImages");
+  const main=document.querySelector("main");
+  if(!main)return;
+  if(!sec){
+    sec=document.createElement("section");
+    sec.id="userAddedImages";
+    sec.className="user-added-images";
+    sec.innerHTML='<div class="section-heading"><p class="eyebrow">Eigen beeldmateriaal</p><h2>Mijn afbeeldingen</h2><p>Afbeeldingen die je zelf aan deze pagina hebt toegevoegd.</p></div><div class="user-images-grid"></div>';
+    main.appendChild(sec);
+  }
+  const grid=sec.querySelector(".user-images-grid");
+  grid.innerHTML="";
+  getAddedImages().forEach((item,i)=>{
+    const card=document.createElement("article");
+    card.className="user-image-item";
+    const img=document.createElement("img");
+    img.src=item.src; img.alt=item.name||"Eigen afbeelding"; img.className="user-added-image";
+    const p=document.createElement("p"); p.textContent=item.name||"Eigen afbeelding";
+    card.append(img,p); grid.appendChild(card);
+  });
+}
 function images(){return [...document.querySelectorAll("main img")].filter(img=>!img.closest(".hotspot"));}
 
 function loadImageEdits(){images().forEach((img,i)=>{const saved=localStorage.getItem(imageKey(i));if(saved)img.src=saved;});}
@@ -93,6 +117,7 @@ function loadImageEdits(){images().forEach((img,i)=>{const saved=localStorage.ge
 function pickImage(i){
   const input=document.getElementById("imageFileInput"); if(!input)return;
   input.dataset.index=i;
+  input.dataset.mode="replace";
   input.value="";
   input.click();
 }
@@ -104,15 +129,28 @@ function fileToDataURL(file){
     r.readAsDataURL(file);
   });
 }
+async function addNewImageFromFile(file){
+  const data=await fileToDataURL(file);
+  const list=getAddedImages();
+  list.push({src:data,name:file.name.replace(/\\.[^.]+$/,"")});
+  saveAddedImages(list);
+  renderAddedImages();
+}
 document.addEventListener("change",async e=>{
   if(e.target.id!=="imageFileInput")return;
   const file=e.target.files&&e.target.files[0]; if(!file)return;
   const i=Number(e.target.dataset.index);
   try{
-    const data=await fileToDataURL(file);
-    localStorage.setItem(imageKey(i),data);
-    const img=images()[i]; if(img)img.src=data;
-    const status=document.getElementById("editorStatus");if(status)status.textContent="Afbeelding aangepast en opgeslagen op deze computer.";
+    if(e.target.dataset.mode==="add"){
+      await addNewImageFromFile(file);
+      e.target.dataset.mode="replace";
+      const status=document.getElementById("editorStatus");if(status)status.textContent="Nieuwe afbeelding toegevoegd en opgeslagen op deze computer.";
+    }else{
+      const data=await fileToDataURL(file);
+      localStorage.setItem(imageKey(i),data);
+      const img=images()[i]; if(img)img.src=data;
+      const status=document.getElementById("editorStatus");if(status)status.textContent="Afbeelding aangepast en opgeslagen op deze computer.";
+    }
   }catch(err){alert(err.message);}
 });
 
@@ -135,7 +173,7 @@ function buildEditor(){
   if(document.getElementById("editorToolbar"))return;
   const bar=document.createElement("div");
   bar.id="editorToolbar";
-  bar.innerHTML='<button class="editor-main-btn" data-a="toggle">✎ Bewerken</button><span id="editorStatus">Wijzigingen worden op deze computer opgeslagen.</span><button data-a="save">Opslaan</button><button data-a="reset">Wis mijn wijzigingen</button>';
+  bar.innerHTML='<button class="editor-main-btn" data-a="toggle">✎ Bewerken</button><span id="editorStatus">Wijzigingen worden op deze computer opgeslagen.</span><button data-a="save">Opslaan</button><button data-a="add-image">+ Nieuwe afbeelding</button><button data-a="reset">Wis mijn wijzigingen</button>';
   document.body.appendChild(bar);
 
   const input=document.createElement("input");
@@ -153,8 +191,15 @@ function buildEditor(){
       setEditMode(false);
       bar.querySelector('[data-a="toggle"]').textContent="✎ Bewerken";
     }
+    if(a==="add-image"){
+      if(!editMode){alert("Klik eerst op 'Bewerken'.");return;}
+      input.dataset.mode="add";
+      input.dataset.index="";
+      input.value="";
+      input.click();
+    }
     if(a==="reset"){
-      if(confirm("Wil je jouw wijzigingen op deze pagina wissen?")){clearTextEdits();Object.keys(localStorage).filter(k=>k.startsWith(editPrefix+"image:"+pageKey+":")).forEach(k=>localStorage.removeItem(k));location.reload();}
+      if(confirm("Wil je jouw wijzigingen op deze pagina wissen?")){clearTextEdits();Object.keys(localStorage).filter(k=>k.startsWith(editPrefix+"image:"+pageKey+":")).forEach(k=>localStorage.removeItem(k));localStorage.removeItem(addedImagesKey);location.reload();}
     }
   });
 
@@ -175,5 +220,6 @@ function buildEditor(){
 
 loadTextEdits();
 loadImageEdits();
+renderAddedImages();
 buildEditor();
 setEditMode(false);
