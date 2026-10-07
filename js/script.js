@@ -110,6 +110,7 @@ function renderAddedImages(){
     card.append(img,p); grid.appendChild(card);
   });
 }
+function imageKey(i){return editPrefix+"image:"+pageKey+":"+i;}
 function images(){return [...document.querySelectorAll("main img")].filter(img=>!img.closest(".hotspot"));}
 
 function loadImageEdits(){images().forEach((img,i)=>{const saved=localStorage.getItem(imageKey(i));if(saved)img.src=saved;});}
