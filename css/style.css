@@ -296,3 +296,7 @@ body.edit-mode .editable-image:hover {
     padding: 20px;
   }
 }
+
+
+/* Verborgen rasvelden behouden hun plek voor de editor, maar zijn niet zichtbaar. */
+.race-hidden-field { display: none !important; }
