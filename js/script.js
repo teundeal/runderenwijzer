@@ -96,7 +96,7 @@ function renderAddedImages(){
     sec=document.createElement("section");
     sec.id="userAddedImages";
     sec.className="user-added-images";
-    sec.innerHTML='<div class="section-heading"><p class="eyebrow">Eigen beeldmateriaal</p><h2>Mijn afbeeldingen</h2><p>Afbeeldingen die je zelf aan deze pagina hebt toegevoegd.</p></div><div class="user-images-grid"></div>';
+    sec.innerHTML='<div class="section-heading"><p class="eyebrow">Bronnen</p><h2>Bronnen</h2><p>Voeg hier de bronnen toe die je voor deze pagina hebt gebruikt.</p></div><div class="user-images-grid"></div>';
     main.appendChild(sec);
   }
   const grid=sec.querySelector(".user-images-grid");
