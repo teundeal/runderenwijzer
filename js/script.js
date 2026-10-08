@@ -254,21 +254,25 @@ const anatomyTitles={
 };
 function showAnatomyPart(key){
   const title=anatomyTitles[key]||key;
-  const d=anatomyInfo[key]||"Klik op Bewerken en vul hier je eigen uitleg in.";
+  const d=anatomyInfo[key]||"Klik op Bewerken om hier je eigen uitleg in te vullen.";
   const t=document.getElementById("anatomyPopupTitle"),p=document.getElementById("anatomyPopupText");
   if(t)t.textContent=title;
   if(p)p.textContent=d;
+  const fields=document.querySelectorAll("[data-anatomy-info-field]");
+  fields.forEach(f=>{f.value=anatomyInfo[key]||"";f.dataset.key=key;});
+  const editors=document.querySelectorAll("[data-anatomy-info-editor]");
+  editors.forEach(e=>{e.value=anatomyInfo[key]||"";e.dataset.key=key;});
 }
 document.querySelectorAll(".anatomy-part").forEach(btn=>btn.addEventListener("click",()=>{
   showAnatomyPart(btn.dataset.anatomy);
-  if(document.body.classList.contains("edit-mode")){
-    const key=btn.dataset.anatomy;
-    const current=anatomyInfo[key]||"";
-    const answer=prompt("Vul de uitleg voor "+(anatomyTitles[key]||key)+" in:",current);
-    if(answer!==null){
-      anatomyInfo[key]=answer;
-      localStorage.setItem(anatomyInfoKey,JSON.stringify(anatomyInfo));
-      showAnatomyPart(key);
-    }
-  }
+}));
+document.querySelectorAll("[data-anatomy-info-save]").forEach(btn=>btn.addEventListener("click",()=>{
+  const editor=document.querySelector("[data-anatomy-info-editor]");
+  const key=editor?.dataset.key;
+  if(!key)return;
+  anatomyInfo[key]=editor.value.trim();
+  localStorage.setItem(anatomyInfoKey,JSON.stringify(anatomyInfo));
+  showAnatomyPart(key);
+  const status=document.getElementById("editorStatus");
+  if(status)status.textContent="Uitleg opgeslagen op deze computer.";
 }));
