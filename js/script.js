@@ -252,19 +252,28 @@ const anatomyTitles={
   oor:"Oor",oog:"Oog",neus:"Neus",hoorn:"Hoorn",nek:"Nek",schouder:"Schouder",rug:"Rug",buik:"Buik",
   uier:"Uier",staart:"Staart",heup:"Heup",been:"Been",klauw:"Klauw",kogel:"Kogel"
 };
-function showAnatomyPart(key){
+function showAnatomyPart(key,btn){
   const title=anatomyTitles[key]||key;
   const d=anatomyInfo[key]||"Klik op Bewerken om hier je eigen uitleg in te vullen.";
-  const t=document.getElementById("anatomyPopupTitle"),p=document.getElementById("anatomyPopupText");
+  const section=btn?.closest(".anatomy-plate-section");
+  const popup=section?.querySelector(".anatomy-popup");
+  const t=popup?.querySelector("[data-popup-title]");
+  const p=popup?.querySelector("[data-popup-text]");
   if(t)t.textContent=title;
   if(p)p.textContent=d;
-  const fields=document.querySelectorAll("[data-anatomy-info-field]");
-  fields.forEach(f=>{f.value=anatomyInfo[key]||"";f.dataset.key=key;});
-  const editors=document.querySelectorAll("[data-anatomy-info-editor]");
-  editors.forEach(e=>{e.value=anatomyInfo[key]||"";e.dataset.key=key;});
 }
 document.querySelectorAll(".anatomy-part").forEach(btn=>btn.addEventListener("click",()=>{
-  showAnatomyPart(btn.dataset.anatomy);
+  const key=btn.dataset.anatomy;
+  showAnatomyPart(key,btn);
+  if(document.body.classList.contains("edit-mode")){
+    const current=anatomyInfo[key]||"";
+    const answer=prompt("Vul de uitleg voor "+(anatomyTitles[key]||key)+" in:",current);
+    if(answer!==null){
+      anatomyInfo[key]=answer;
+      localStorage.setItem(anatomyInfoKey,JSON.stringify(anatomyInfo));
+      showAnatomyPart(key,btn);
+    }
+  }
 }));
 document.querySelectorAll("[data-anatomy-info-save]").forEach(btn=>btn.addEventListener("click",()=>{
   const editor=document.querySelector("[data-anatomy-info-editor]");
