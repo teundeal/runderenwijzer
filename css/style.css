@@ -300,3 +300,9 @@ body.edit-mode .editable-image:hover {
 
 /* Verborgen rasvelden behouden hun plek voor de editor, maar zijn niet zichtbaar. */
 .race-hidden-field { display: none !important; }
+
+
+/* Bronnenveld is altijd goed zichtbaar en klikbaar in de bewerkmodus */
+.race-sources p { min-height: 32px; }
+.edit-mode .race-sources p { min-height: 45px; padding: 10px; border: 1px dashed currentColor; border-radius: 8px; cursor: text; }
+.edit-mode .race-sources p:empty::before { content: "Klik hier om een bron in te vullen"; opacity: .55; }
