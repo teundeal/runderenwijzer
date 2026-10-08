@@ -368,3 +368,16 @@ body.edit-mode .editable-image:hover {
   .anatomy-plate{min-height:320px;padding:12px}
   .anatomy-part{font-size:.62rem;padding:6px 8px}
 }
+
+
+/* Anatomie: klikpunten volgen exact de afbeelding */
+.anatomy-plate { overflow: visible; }
+.anatomy-image-wrap { position: relative; width: 100%; max-width: 900px; margin: 0 auto; line-height: 0; }
+.anatomy-image-wrap img { display:block; width:100%; height:auto; max-width:none; max-height:none; object-fit:contain; }
+.anatomy-image-wrap .anatomy-part { position:absolute; z-index:2; }
+.digestive-plate { min-height:0; padding:24px; }
+.exterior-plate { min-height:0; padding:24px; }
+@media(max-width:700px){
+  .anatomy-plate { padding:10px; }
+  .digestive-plate,.exterior-plate { padding:10px; }
+}
