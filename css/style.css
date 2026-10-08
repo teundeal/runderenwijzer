@@ -26,3 +26,22 @@ undefined
 #signalResult { min-height:28px; font-weight:800; color:var(--green); }
 @media(max-width:900px){.planning-row{grid-template-columns:1fr 1fr}.planning-row>strong{grid-column:1/-1}.signal-game{grid-template-columns:1fr}}
 @media(max-width:600px){.assignment-card{padding:22px}.planning-row{grid-template-columns:1fr}.signal-game{margin:0 5% 50px;padding:20px}.signal-clue dl{grid-template-columns:1fr}}
+
+
+/* Nieuwe anatomieplaten */
+.anatomy-plate-section { margin:0 5% 70px; }
+.anatomy-plate { position:relative; display:flex; align-items:center; justify-content:center; padding:25px; min-height:430px; background:var(--white); border:1px solid rgba(36,72,58,.07); border-radius:24px; box-shadow:var(--shadow); overflow:hidden; }
+.anatomy-plate img { display:block; width:100%; max-width:900px; max-height:520px; object-fit:contain; }
+.anatomy-part { position:absolute; transform:translate(-50%,-50%); border:2px solid var(--white); border-radius:999px; background:var(--green); color:white; padding:8px 11px; font:inherit; font-size:.75rem; font-weight:800; cursor:pointer; box-shadow:0 4px 12px rgba(36,72,58,.22); }
+.anatomy-part:hover,.anatomy-part:focus { background:var(--brown); transform:translate(-50%,-50%) scale(1.06); }
+.anatomy-popup { margin-top:16px; padding:20px 24px; background:var(--green-light); border-radius:16px; color:#60665f; }
+.anatomy-popup strong { display:block; color:var(--green); font-size:1.15rem; margin-bottom:5px; }
+.anatomy-popup p { margin:0; }
+.anatomy-assignment { display:flex; flex-direction:column; gap:18px; margin:0 5% 70px; }
+.anatomy-assignment .topic-card { width:100%; }
+.digestive-plate { background:var(--green-light); }
+.exterior-plate { background:var(--sand); }
+@media(max-width:700px){
+  .anatomy-plate{min-height:320px;padding:12px}
+  .anatomy-part{font-size:.62rem;padding:6px 8px}
+}
