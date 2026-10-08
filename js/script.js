@@ -188,7 +188,7 @@ function buildEditor(){
   input.type="file"; input.accept="image/*"; input.id="imageFileInput"; input.hidden=true;
   document.body.appendChild(input);
 
-  bar.addEventListener("click",e=>{
+  bar.addEventListener("click",async e=>{
     const a=e.target.closest("button")?.dataset.a;if(!a)return;
     if(a==="toggle"){
       setEditMode(!editMode);
