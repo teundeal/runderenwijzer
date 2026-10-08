@@ -225,3 +225,50 @@ loadTextEdits();
 loadImageEdits();
 buildEditor();
 setEditMode(false);
+
+
+/* Signalement mini-game */
+const checkSignal=document.getElementById("checkSignal");
+if(checkSignal){
+  checkSignal.addEventListener("click",()=>{
+    const fields=["signalRace","signalSex","signalAge"];
+    const complete=fields.every(id=>document.getElementById(id)?.value);
+    const result=document.getElementById("signalResult");
+    if(!complete){result.textContent="Vul eerst alle antwoorden in.";return;}
+    const correct=fields.every(id=>document.getElementById(id).value==="correct");
+    result.textContent=correct?"Goed gedaan! Je hebt het rund correct geïdentificeerd.":"Nog niet helemaal goed. Kijk opnieuw naar het signalement.";
+  });
+}
+
+/* Klikbare anatomieplaten met kleine, lokaal opgeslagen informatiebox */
+const anatomyInfoKey=editPrefix+"anatomy-info:"+pageKey;
+function getAnatomyInfo(){
+  try{return JSON.parse(localStorage.getItem(anatomyInfoKey)||"{}")}catch(e){return {}}
+}
+const anatomyInfo=getAnatomyInfo();
+const anatomyTitles={
+  mond:"Mond",slokdarm:"Slokdarm",pens:"Pens",netmaag:"Netmaag",boekmaag:"Boekmaag",lebmaag:"Lebmaag",
+  dunnedarm:"Dunne darm",dikkedarm:"Dikke darm",endeldarm:"Endeldarm",anus:"Anus",
+  oor:"Oor",oog:"Oog",neus:"Neus",hoorn:"Hoorn",nek:"Nek",schouder:"Schouder",rug:"Rug",buik:"Buik",
+  uier:"Uier",staart:"Staart",heup:"Heup",been:"Been",klauw:"Klauw",kogel:"Kogel"
+};
+function showAnatomyPart(key){
+  const title=anatomyTitles[key]||key;
+  const d=anatomyInfo[key]||"Klik op Bewerken en vul hier je eigen uitleg in.";
+  const t=document.getElementById("anatomyPopupTitle"),p=document.getElementById("anatomyPopupText");
+  if(t)t.textContent=title;
+  if(p)p.textContent=d;
+}
+document.querySelectorAll(".anatomy-part").forEach(btn=>btn.addEventListener("click",()=>{
+  showAnatomyPart(btn.dataset.anatomy);
+  if(document.body.classList.contains("edit-mode")){
+    const key=btn.dataset.anatomy;
+    const current=anatomyInfo[key]||"";
+    const answer=prompt("Vul de uitleg voor "+(anatomyTitles[key]||key)+" in:",current);
+    if(answer!==null){
+      anatomyInfo[key]=answer;
+      localStorage.setItem(anatomyInfoKey,JSON.stringify(anatomyInfo));
+      showAnatomyPart(key);
+    }
+  }
+}));
