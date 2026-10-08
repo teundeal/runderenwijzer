@@ -1,5 +1,209 @@
 <!DOCTYPE html>
-<html lang="nl"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Anatomie | Runderenwijzer</title><link rel="stylesheet" href="css/style.css?v=7"></head>
-<body><header class="site-header"><a class="logo" href="index.html"><span class="logo-mark">🐄</span> Runderenwijzer</a><nav aria-label="Hoofdnavigatie"><a href="index.html">Home</a><a href="rassen.html">Rassen</a><a href="anatomie.html">Anatomie</a><a href="gedrag.html">Gedrag</a><a href="voeding.html">Voeding</a><a href="gezondheid.html">Gezondheid</a><a href="huisvesting.html">Huisvesting</a><a href="rundveehouderij.html">Rundveehouderij</a><a href="weetjes.html">Weetjes</a></nav></header>
-<main><section class="intro" style="min-height:65vh;padding-top:90px"><p class="eyebrow">Runderenwijzer</p><h1 style="font-size:clamp(2.5rem,6vw,4.5rem)">Anatomie</h1><p class="lead">Leer hoe het lichaam van een rund is opgebouwd en wat de verschillende lichaamsdelen doen.</p><div class="topic-card"><h2 style="font-size:1.6rem">Inhoud komt hier</h2><p>Dit is de plek waar jouw eigen informatie en foto's komen. We bouwen deze pagina stap voor stap verder uit.</p></div></section></main><footer><strong>Runderenwijzer</strong><span>Een kenniswebsite voor studenten diergerichte opleidingen.</span></footer><script src="js/script.js?v=8"></script></body></html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Anatomie | Runderenwijzer</title>
+  <link rel="stylesheet" href="css/style.css?v=8">
+</head>
+<body>
+
+<header class="site-header">
+  <a class="logo" href="index.html"><span class="logo-mark">🐄</span> Runderenwijzer</a>
+  <nav aria-label="Hoofdnavigatie">
+    <a href="index.html">Home</a>
+    <a href="rassen.html">Rassen</a>
+    <a class="active" href="anatomie.html">Anatomie</a>
+    <a href="gedrag.html">Gedrag</a>
+    <a href="voeding.html">Voeding</a>
+    <a href="gezondheid.html">Gezondheid</a>
+    <a href="huisvesting.html">Huisvesting</a>
+    <a href="rundveehouderij.html">Rundveehouderij</a>
+    <a href="weetjes.html">Weetjes</a>
+  </nav>
+</header>
+
+<main>
+<section class="intro anatomy-page" style="padding-top:90px">
+  <p class="eyebrow">Runderenwijzer</p>
+  <h1 style="font-size:clamp(2.5rem,6vw,4.5rem)">Anatomie</h1>
+  <p class="lead">Klik op een orgaan om te bekijken waar het zich bevindt en om je eigen informatie in te vullen.</p>
+
+  <article class="topic-card anatomy-interactive">
+    <div class="anatomy-visual">
+      <div class="section-heading">
+        <p class="eyebrow">Binnenkant van het rund</p>
+        <h2>Organen</h2>
+        <p>Klik op een onderdeel van de afbeelding.</p>
+      </div>
+
+      <div class="cow-inside-diagram">
+        <div class="cow-body-shape">
+          <span class="cow-head"></span>
+          <span class="cow-neck"></span>
+          <span class="cow-tail"></span>
+          <span class="cow-leg leg1"></span>
+          <span class="cow-leg leg2"></span>
+          <span class="cow-leg leg3"></span>
+          <span class="cow-leg leg4"></span>
+
+          <button class="hotspot organ-hotspot" data-part="pens" style="left:43%;top:45%" aria-label="Pens">Pens</button>
+          <button class="hotspot organ-hotspot" data-part="netmaag" style="left:54%;top:38%" aria-label="Netmaag">Netmaag</button>
+          <button class="hotspot organ-hotspot" data-part="boekmaag" style="left:60%;top:52%" aria-label="Boekmaag">Boekmaag</button>
+          <button class="hotspot organ-hotspot" data-part="lebmaag" style="left:53%;top:62%" aria-label="Lebmaag">Lebmaag</button>
+          <button class="hotspot organ-hotspot" data-part="dunnedarm" style="left:64%;top:64%" aria-label="Dunne darm">Dunne darm</button>
+          <button class="hotspot organ-hotspot" data-part="dikkedarm" style="left:70%;top:52%" aria-label="Dikke darm">Dikke darm</button>
+          <button class="hotspot organ-hotspot" data-part="lever" style="left:50%;top:28%" aria-label="Lever">Lever</button>
+          <button class="hotspot organ-hotspot" data-part="hart" style="left:34%;top:31%" aria-label="Hart">Hart</button>
+          <button class="hotspot organ-hotspot" data-part="longen" style="left:28%;top:24%" aria-label="Longen">Longen</button>
+          <button class="hotspot organ-hotspot" data-part="nieren" style="left:58%;top:35%" aria-label="Nieren">Nieren</button>
+        </div>
+      </div>
+
+      <div class="anatomy-selected topic-card">
+        <span class="info-tag">Geselecteerd</span>
+        <h2 id="partTitle">Pens</h2>
+        <p id="partText">Klik op een orgaan voor meer informatie.</p>
+        <a id="partLink" href="#organen">Naar informatie</a>
+      </div>
+    </div>
+  </article>
+
+  <section id="organen" class="organ-sections">
+    <div class="section-heading">
+      <p class="eyebrow">Informatievelden</p>
+      <h2>Onderdelen van de binnenkant</h2>
+      <p>Vul hier per orgaan je eigen informatie in.</p>
+    </div>
+
+    <article class="organ-card topic-card">
+      <h2>Pens</h2>
+      <div class="race-info-grid">
+        <div class="race-field"><h3>Functie</h3><p></p></div>
+        <div class="race-field"><h3>Plaats in het lichaam</h3><p></p></div>
+        <div class="race-field"><h3>Hoe werkt het?</h3><p></p></div>
+        <div class="race-field"><h3>Bijzondere kenmerken</h3><p></p></div>
+        <div class="race-field"><h3>Gezondheid</h3><p></p></div>
+        <div class="race-field"><h3>Bronnen</h3><p></p></div>
+      </div>
+    </article>
+
+    <article class="organ-card topic-card">
+      <h2>Netmaag</h2>
+      <div class="race-info-grid">
+        <div class="race-field"><h3>Functie</h3><p></p></div>
+        <div class="race-field"><h3>Plaats in het lichaam</h3><p></p></div>
+        <div class="race-field"><h3>Hoe werkt het?</h3><p></p></div>
+        <div class="race-field"><h3>Bijzondere kenmerken</h3><p></p></div>
+        <div class="race-field"><h3>Gezondheid</h3><p></p></div>
+        <div class="race-field"><h3>Bronnen</h3><p></p></div>
+      </div>
+    </article>
+
+    <article class="organ-card topic-card">
+      <h2>Boekmaag</h2>
+      <div class="race-info-grid">
+        <div class="race-field"><h3>Functie</h3><p></p></div>
+        <div class="race-field"><h3>Plaats in het lichaam</h3><p></p></div>
+        <div class="race-field"><h3>Hoe werkt het?</h3><p></p></div>
+        <div class="race-field"><h3>Bijzondere kenmerken</h3><p></p></div>
+        <div class="race-field"><h3>Gezondheid</h3><p></p></div>
+        <div class="race-field"><h3>Bronnen</h3><p></p></div>
+      </div>
+    </article>
+
+    <article class="organ-card topic-card">
+      <h2>Lebmaag</h2>
+      <div class="race-info-grid">
+        <div class="race-field"><h3>Functie</h3><p></p></div>
+        <div class="race-field"><h3>Plaats in het lichaam</h3><p></p></div>
+        <div class="race-field"><h3>Hoe werkt het?</h3><p></p></div>
+        <div class="race-field"><h3>Bijzondere kenmerken</h3><p></p></div>
+        <div class="race-field"><h3>Gezondheid</h3><p></p></div>
+        <div class="race-field"><h3>Bronnen</h3><p></p></div>
+      </div>
+    </article>
+
+    <article class="organ-card topic-card">
+      <h2>Dunne darm</h2>
+      <div class="race-info-grid">
+        <div class="race-field"><h3>Functie</h3><p></p></div>
+        <div class="race-field"><h3>Plaats in het lichaam</h3><p></p></div>
+        <div class="race-field"><h3>Hoe werkt het?</h3><p></p></div>
+        <div class="race-field"><h3>Bijzondere kenmerken</h3><p></p></div>
+        <div class="race-field"><h3>Gezondheid</h3><p></p></div>
+        <div class="race-field"><h3>Bronnen</h3><p></p></div>
+      </div>
+    </article>
+
+    <article class="organ-card topic-card">
+      <h2>Dikke darm</h2>
+      <div class="race-info-grid">
+        <div class="race-field"><h3>Functie</h3><p></p></div>
+        <div class="race-field"><h3>Plaats in het lichaam</h3><p></p></div>
+        <div class="race-field"><h3>Hoe werkt het?</h3><p></p></div>
+        <div class="race-field"><h3>Bijzondere kenmerken</h3><p></p></div>
+        <div class="race-field"><h3>Gezondheid</h3><p></p></div>
+        <div class="race-field"><h3>Bronnen</h3><p></p></div>
+      </div>
+    </article>
+
+    <article class="organ-card topic-card">
+      <h2>Lever</h2>
+      <div class="race-info-grid">
+        <div class="race-field"><h3>Functie</h3><p></p></div>
+        <div class="race-field"><h3>Plaats in het lichaam</h3><p></p></div>
+        <div class="race-field"><h3>Hoe werkt het?</h3><p></p></div>
+        <div class="race-field"><h3>Bijzondere kenmerken</h3><p></p></div>
+        <div class="race-field"><h3>Gezondheid</h3><p></p></div>
+        <div class="race-field"><h3>Bronnen</h3><p></p></div>
+      </div>
+    </article>
+
+    <article class="organ-card topic-card">
+      <h2>Hart</h2>
+      <div class="race-info-grid">
+        <div class="race-field"><h3>Functie</h3><p></p></div>
+        <div class="race-field"><h3>Plaats in het lichaam</h3><p></p></div>
+        <div class="race-field"><h3>Hoe werkt het?</h3><p></p></div>
+        <div class="race-field"><h3>Bijzondere kenmerken</h3><p></p></div>
+        <div class="race-field"><h3>Gezondheid</h3><p></p></div>
+        <div class="race-field"><h3>Bronnen</h3><p></p></div>
+      </div>
+    </article>
+
+    <article class="organ-card topic-card">
+      <h2>Longen</h2>
+      <div class="race-info-grid">
+        <div class="race-field"><h3>Functie</h3><p></p></div>
+        <div class="race-field"><h3>Plaats in het lichaam</h3><p></p></div>
+        <div class="race-field"><h3>Hoe werkt het?</h3><p></p></div>
+        <div class="race-field"><h3>Bijzondere kenmerken</h3><p></p></div>
+        <div class="race-field"><h3>Gezondheid</h3><p></p></div>
+        <div class="race-field"><h3>Bronnen</h3><p></p></div>
+      </div>
+    </article>
+
+    <article class="organ-card topic-card">
+      <h2>Nieren</h2>
+      <div class="race-info-grid">
+        <div class="race-field"><h3>Functie</h3><p></p></div>
+        <div class="race-field"><h3>Plaats in het lichaam</h3><p></p></div>
+        <div class="race-field"><h3>Hoe werkt het?</h3><p></p></div>
+        <div class="race-field"><h3>Bijzondere kenmerken</h3><p></p></div>
+        <div class="race-field"><h3>Gezondheid</h3><p></p></div>
+        <div class="race-field"><h3>Bronnen</h3><p></p></div>
+      </div>
+    </article>
+  </section>
+</section>
+</main>
+
+<footer>
+  <strong>Runderenwijzer</strong>
+  <span>Een kenniswebsite voor studenten diergerichte opleidingen.</span>
+</footer>
+
+<script src="js/script.js?v=9"></script>
+</body>
+</html>
