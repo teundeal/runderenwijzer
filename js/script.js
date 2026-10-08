@@ -219,8 +219,8 @@ function buildEditor(){
   }
 }
 
+renderAddedImages();
 loadTextEdits();
 loadImageEdits();
-renderAddedImages();
 buildEditor();
 setEditMode(false);
