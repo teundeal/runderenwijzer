@@ -326,3 +326,17 @@ body.edit-mode .editable-image:hover {
 .organ-card{margin:24px 0;}
 .organ-card h2{margin-top:0;}
 @media(max-width:800px){.anatomy-visual{grid-template-columns:1fr}.cow-inside-diagram{min-height:350px}.cow-body-shape{height:260px}.organ-hotspot{font-size:.7rem;min-width:48px;padding:6px 7px}}
+
+/* Gedragspagina */
+.gedrag-page { padding-bottom: 70px; }
+.gedrag-intro { padding-bottom: 35px; }
+.gedrag-grid { margin: 0 5%; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 22px; }
+.gedrag-card { min-height: 180px; padding: 26px; }
+.gedrag-card h2 { font-size: 1.45rem; margin-bottom: 10px; }
+.gedrag-card p { font-size: 1rem; line-height: 1.6; }
+@media (max-width: 900px) {
+  .gedrag-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 600px) {
+  .gedrag-grid { grid-template-columns: 1fr; margin: 0 5%; }
+}
