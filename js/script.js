@@ -7,6 +7,12 @@ const stages = [
 
 const editPrefix="runderenwijzer-page-v2:";
 const pageKey=location.pathname.replace(/\/+$/,"")||"/";
+const editorApi="https://runderenwijze-editor.teunboerlage11.workers.dev/";
+let editorPassword="";
+function getPageFilePath(){const p=location.pathname.split("/").filter(Boolean);return p.length?p[p.length-1]:"index.html";}
+function getEditorPassword(){if(editorPassword)return editorPassword;const value=prompt("Voer je editor-wachtwoord in om de wijziging op te slaan:");if(!value)return null;editorPassword=value;return value;}
+function cleanPageHtml(){const clone=document.documentElement.cloneNode(true);["editorToolbar","imageFileInput","hotspotEditor","userAddedImages"].forEach(id=>clone.querySelector("#"+id)?.remove());clone.querySelectorAll("[contenteditable]").forEach(el=>el.removeAttribute("contenteditable"));clone.querySelectorAll("[data-bound]").forEach(el=>el.removeAttribute("data-bound"));clone.querySelector("body")?.classList.remove("edit-mode");return "<!DOCTYPE html>\n"+clone.outerHTML;}
+async function publishPageToGitHub(){const password=getEditorPassword();if(!password)return false;const response=await fetch(editorApi,{method:"POST",headers:{"Content-Type":"application/json","X-Editor-Password":password},body:JSON.stringify({path:getPageFilePath(),content:cleanPageHtml(),message:"Wijziging via Runderenwijzer editor"})});const result=await response.json().catch(()=>({}));if(!response.ok||!result.success)throw new Error(result.error||"Opslaan naar GitHub is mislukt.");return true;}
 
 const cow=document.getElementById("cowIllustration");
 if(cow){
@@ -83,7 +89,7 @@ function loadTextEdits(){
     if(saved!==null)el.innerHTML=saved;
   });
 }
-function saveTextEdits(){editable.forEach((el,i)=>localStorage.setItem(pageEditKey(i),el.innerHTML));}
+async function saveTextEdits(){editable.forEach((el,i)=>localStorage.setItem(pageEditKey(i),el.innerHTML));await publishPageToGitHub();}
 function clearTextEdits(){editable.forEach((el,i)=>localStorage.removeItem(pageEditKey(i)));}
 
 const addedImagesKey=editPrefix+"added:"+pageKey;
@@ -189,9 +195,21 @@ function buildEditor(){
       e.target.textContent=editMode?"✓ Bewerken aan":"✎ Bewerken";
     }
     if(a==="save"){
-      saveTextEdits();
-      setEditMode(false);
-      bar.querySelector('[data-a="toggle"]').textContent="✎ Bewerken";
+      const status=document.getElementById("editorStatus");
+      const saveButton=bar.querySelector('[data-a="save"]');
+      try{
+        if(saveButton)saveButton.disabled=true;
+        if(status)status.textContent="Wijzigingen worden naar GitHub opgeslagen...";
+        await saveTextEdits();
+        setEditMode(false);
+        bar.querySelector('[data-a="toggle"]').textContent="✎ Bewerken";
+        if(status)status.textContent="Opgeslagen op GitHub. De website wordt zo bijgewerkt.";
+      }catch(err){
+        if(status)status.textContent="Opslaan mislukt: "+err.message;
+        alert(err.message);
+      }finally{
+        if(saveButton)saveButton.disabled=false;
+      }
     }
     if(a==="add-image"){
       if(!editMode){alert("Klik eerst op 'Bewerken'.");return;}
