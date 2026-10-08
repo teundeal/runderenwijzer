@@ -10,9 +10,39 @@ const pageKey=location.pathname.replace(/\/+$/,"")||"/";
 const editorApi="https://runderenwijze-editor.teunboerlage11.workers.dev/";
 let editorPassword="";
 function getPageFilePath(){const p=location.pathname.split("/").filter(Boolean);return p.length?p[p.length-1]:"index.html";}
-function getEditorPassword(){if(editorPassword)return editorPassword;const value=prompt("Voer je editor-wachtwoord in om de wijziging op te slaan:");if(!value)return null;editorPassword=value;return value;}
-function cleanPageHtml(){const clone=document.documentElement.cloneNode(true);["editorToolbar","imageFileInput","hotspotEditor","userAddedImages"].forEach(id=>clone.querySelector("#"+id)?.remove());clone.querySelectorAll("[contenteditable]").forEach(el=>el.removeAttribute("contenteditable"));clone.querySelectorAll("[data-bound]").forEach(el=>el.removeAttribute("data-bound"));clone.querySelector("body")?.classList.remove("edit-mode");return "<!DOCTYPE html>\n"+clone.outerHTML;}
-async function publishPageToGitHub(){const password=getEditorPassword();if(!password)return false;const response=await fetch(editorApi,{method:"POST",headers:{"Content-Type":"application/json","X-Editor-Password":password},body:JSON.stringify({path:getPageFilePath(),content:cleanPageHtml(),message:"Wijziging via Runderenwijzer editor"})});const result=await response.json().catch(()=>({}));if(!response.ok||!result.success)throw new Error(result.error||"Opslaan naar GitHub is mislukt.");return true;}
+async function verifyEditorPassword(value){
+  const response=await fetch(editorApi,{method:"POST",headers:{"Content-Type":"application/json","X-Editor-Password":value},body:JSON.stringify({path:"__auth_check__",content:""})});
+  if(response.status===403)return true;
+  if(response.status===401)return false;
+  throw new Error("De editor kon het wachtwoord niet controleren.");
+}
+async function getEditorPassword(){
+  if(editorPassword)return editorPassword;
+  const value=prompt("Voer je editor-wachtwoord in om te kunnen bewerken:");
+  if(!value)return null;
+  if(!(await verifyEditorPassword(value))){
+    alert("Ongeldig wachtwoord.");
+    return null;
+  }
+  editorPassword=value;
+  return value;
+}
+function cleanPageHtml(){
+  const clone=document.documentElement.cloneNode(true);
+  ["editorToolbar","imageFileInput","hotspotEditor"].forEach(id=>clone.querySelector("#"+id)?.remove());
+  clone.querySelectorAll("[contenteditable]").forEach(el=>el.removeAttribute("contenteditable"));
+  clone.querySelectorAll("[data-bound]").forEach(el=>el.removeAttribute("data-bound"));
+  clone.querySelector("body")?.classList.remove("edit-mode");
+  return "<!DOCTYPE html>\n"+clone.outerHTML;
+}
+async function publishPageToGitHub(){
+  const password=await getEditorPassword();
+  if(!password)return false;
+  const response=await fetch(editorApi,{method:"POST",headers:{"Content-Type":"application/json","X-Editor-Password":password},body:JSON.stringify({path:getPageFilePath(),content:cleanPageHtml(),message:"Wijziging via Runderenwijzer editor"})});
+  const result=await response.json().catch(()=>({}));
+  if(!response.ok||!result.success)throw new Error(result.error||"Opslaan naar GitHub is mislukt.");
+  return true;
+}
 
 const cow=document.getElementById("cowIllustration");
 if(cow){
@@ -99,7 +129,9 @@ function renderAddedImages(){
   let sec=document.getElementById("userAddedImages");
   const main=document.querySelector("main");
   if(!main)return;
+  const list=getAddedImages();
   if(!sec){
+    if(!list.length)return;
     sec=document.createElement("section");
     sec.id="userAddedImages";
     sec.className="user-added-images";
@@ -107,8 +139,10 @@ function renderAddedImages(){
     main.appendChild(sec);
   }
   const grid=sec.querySelector(".user-images-grid");
+  if(!grid)return;
+  if(!list.length)return;
   grid.innerHTML="";
-  getAddedImages().forEach((item,i)=>{
+  list.forEach((item,i)=>{
     const card=document.createElement("article");
     card.className="user-image-item";
     const img=document.createElement("img");
@@ -191,8 +225,19 @@ function buildEditor(){
   bar.addEventListener("click",async e=>{
     const a=e.target.closest("button")?.dataset.a;if(!a)return;
     if(a==="toggle"){
-      setEditMode(!editMode);
-      e.target.textContent=editMode?"✓ Bewerken aan":"✎ Bewerken";
+      if(editMode){
+        setEditMode(false);
+        e.target.textContent="✎ Bewerken";
+        return;
+      }
+      try{
+        const password=await getEditorPassword();
+        if(!password)return;
+        setEditMode(true);
+        e.target.textContent="✓ Bewerken aan";
+      }catch(err){
+        alert(err.message);
+      }
     }
     if(a==="save"){
       const status=document.getElementById("editorStatus");
