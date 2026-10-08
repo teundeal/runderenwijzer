@@ -231,12 +231,12 @@ setEditMode(false);
 const checkSignal=document.getElementById("checkSignal");
 if(checkSignal){
   checkSignal.addEventListener("click",()=>{
-    const fields=["signalRace","signalSex","signalAge"];
-    const complete=fields.every(id=>document.getElementById(id)?.value);
+    const fields=[...document.querySelectorAll("[data-signal]")];
     const result=document.getElementById("signalResult");
-    if(!complete){result.textContent="Vul eerst alle antwoorden in.";return;}
-    const correct=fields.every(id=>document.getElementById(id).value==="correct");
-    result.textContent=correct?"Goed gedaan! Je hebt het rund correct geïdentificeerd.":"Nog niet helemaal goed. Kijk opnieuw naar het signalement.";
+    const complete=fields.every(field=>field.value);
+    if(!complete){result.textContent="Vul eerst alle kenmerken in.";return;}
+    const score=fields.filter(field=>field.value==="correct").length;
+    result.textContent=score===fields.length?"Goed gedaan! Je hebt het rund volledig correct geïdentificeerd.":"Je hebt "+score+" van de "+fields.length+" kenmerken goed. Kijk opnieuw naar het signalement.";
   });
 }
 
