@@ -445,3 +445,12 @@ body.edit-mode .editable-image:hover {
 /* Versleepbare anatomiepunten: alleen actief tijdens Bewerken */
 body.edit-mode .anatomy-plate .anatomy-part { cursor: grab; touch-action: none; }
 body.edit-mode .anatomy-plate .anatomy-part:active { cursor: grabbing; }
+
+
+/* Anatomie: duidelijke groepen voor onderdelen van het spijsverteringsstelsel */
+.anatomy-info-group { margin: 26px 0 34px; }
+.anatomy-group-heading { color: var(--green); font-size: 1.35rem; margin: 0 0 14px; padding-bottom: 8px; border-bottom: 2px solid rgba(36,72,58,.16); }
+.anatomy-info-group .anatomy-info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 16px; }
+.anatomy-info-group .topic-card { min-width: 0; }
+.anatomy-info-group .topic-card h4 { color: var(--green); font-size: 1.05rem; margin: 0 0 8px; }
+.anatomy-info-group .topic-card p { margin: 0; }
