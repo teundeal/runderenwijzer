@@ -310,8 +310,8 @@ function getAnatomyInfo(){
 }
 const anatomyInfo=getAnatomyInfo();
 const anatomyTitles={
-  mond:"Mond",slokdarm:"Slokdarm",pens:"Pens",netmaag:"Netmaag",boekmaag:"Boekmaag",lebmaag:"Lebmaag",
-  dunnedarm:"Dunne darm",dikkedarm:"Dikke darm",endeldarm:"Endeldarm",anus:"Anus",
+  mond:"Mond",speekselklieren:"Speekselklieren",slokdarm:"Slokdarm",pens:"Pens",netmaag:"Netmaag",boekmaag:"Boekmaag",lebmaag:"Lebmaag",
+  lever:"Lever",alvleesklier:"Alvleesklier",dunnedarm:"Dunne darm",dikkedarm:"Dikke darm",endeldarm:"Endeldarm",anus:"Anus",
   oor:"Oor",oog:"Oog",neus:"Neus",hoorn:"Hoorn",nek:"Nek",schouder:"Schouder",rug:"Rug",buik:"Buik",
   uier:"Uier",staart:"Staart",heup:"Heup",been:"Been",klauw:"Klauw",kogel:"Kogel"
 };
@@ -325,17 +325,15 @@ function showAnatomyPart(key,btn){
   if(t)t.textContent=title;
   if(p)p.textContent=d;
 }
+let selectedAnatomyButton=null;
 document.querySelectorAll(".anatomy-part").forEach(btn=>btn.addEventListener("click",()=>{
   const key=btn.dataset.anatomy;
+  selectedAnatomyButton=btn;
   showAnatomyPart(key,btn);
-  if(document.body.classList.contains("edit-mode")){
-    const current=anatomyInfo[key]||"";
-    const answer=prompt("Vul de uitleg voor "+(anatomyTitles[key]||key)+" in:",current);
-    if(answer!==null){
-      anatomyInfo[key]=answer;
-      localStorage.setItem(anatomyInfoKey,JSON.stringify(anatomyInfo));
-      showAnatomyPart(key,btn);
-    }
+  const editor=document.querySelector("[data-anatomy-info-editor]");
+  if(editor){
+    editor.dataset.key=key;
+    editor.value=anatomyInfo[key]||"";
   }
 }));
 document.querySelectorAll("[data-anatomy-info-save]").forEach(btn=>btn.addEventListener("click",()=>{
@@ -344,7 +342,7 @@ document.querySelectorAll("[data-anatomy-info-save]").forEach(btn=>btn.addEventL
   if(!key)return;
   anatomyInfo[key]=editor.value.trim();
   localStorage.setItem(anatomyInfoKey,JSON.stringify(anatomyInfo));
-  showAnatomyPart(key);
+  showAnatomyPart(key,selectedAnatomyButton);
   const status=document.getElementById("editorStatus");
   if(status)status.textContent="Uitleg opgeslagen op deze computer.";
 }));
