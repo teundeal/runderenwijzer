@@ -326,7 +326,47 @@ function showAnatomyPart(key,btn){
   if(p)p.textContent=d;
 }
 let selectedAnatomyButton=null;
-document.querySelectorAll(".anatomy-part").forEach(btn=>btn.addEventListener("click",()=>{
+
+/* In de bewerkmodus kunnen anatomiepunten rechtstreeks worden versleept. */
+let draggedAnatomyPoint=null;
+let anatomyPointerStart=null;
+let suppressAnatomyClick=false;
+document.querySelectorAll(".anatomy-plate .anatomy-part").forEach(btn=>{
+  btn.addEventListener("pointerdown",e=>{
+    if(!editMode || e.button!==0)return;
+    const wrap=btn.closest(".anatomy-image-wrap");
+    if(!wrap)return;
+    const rect=wrap.getBoundingClientRect();
+    draggedAnatomyPoint={btn,wrap,pointerId:e.pointerId,moved:false};
+    anatomyPointerStart={x:e.clientX,y:e.clientY,left:parseFloat(btn.style.left)||0,top:parseFloat(btn.style.top)||0,width:rect.width,height:rect.height};
+    btn.setPointerCapture(e.pointerId);
+    e.preventDefault();
+  });
+  btn.addEventListener("pointermove",e=>{
+    if(!draggedAnatomyPoint || draggedAnatomyPoint.btn!==btn || draggedAnatomyPoint.pointerId!==e.pointerId)return;
+    const dx=e.clientX-anatomyPointerStart.x,dy=e.clientY-anatomyPointerStart.y;
+    if(Math.abs(dx)+Math.abs(dy)>2)draggedAnatomyPoint.moved=true;
+    if(!draggedAnatomyPoint.moved)return;
+    const left=Math.max(0,Math.min(100,anatomyPointerStart.left+dx/anatomyPointerStart.width*100));
+    const top=Math.max(0,Math.min(100,anatomyPointerStart.top+dy/anatomyPointerStart.height*100));
+    btn.style.left=left.toFixed(2)+"%";
+    btn.style.top=top.toFixed(2)+"%";
+    const status=document.getElementById("editorStatus");
+    if(status)status.textContent="Punt verplaatst. Sleep andere punten en klik daarna op Opslaan.";
+    e.preventDefault();
+  });
+  const finishDrag=e=>{
+    if(!draggedAnatomyPoint || draggedAnatomyPoint.btn!==btn || draggedAnatomyPoint.pointerId!==e.pointerId)return;
+    suppressAnatomyClick=draggedAnatomyPoint.moved;
+    draggedAnatomyPoint=null;
+    anatomyPointerStart=null;
+  };
+  btn.addEventListener("pointerup",finishDrag);
+  btn.addEventListener("pointercancel",finishDrag);
+});
+document.querySelectorAll(".anatomy-part").forEach(btn=>btn.addEventListener("click",e=>{
+  if(suppressAnatomyClick){suppressAnatomyClick=false;e.preventDefault();return;}
+
   const key=btn.dataset.anatomy;
   selectedAnatomyButton=btn;
   showAnatomyPart(key,btn);
