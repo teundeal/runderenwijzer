@@ -106,6 +106,19 @@ footer strong { color: white; }
   box-shadow: 0 10px 35px rgba(36,72,58,.18);
   font-size: .84rem;
 }
+#editorToolbar:not(.expanded) {
+  gap: 0;
+  width: auto;
+  padding: 4px;
+  border-radius: 12px;
+}
+#editorToolbar:not(.expanded) > :not(.editor-main-btn) {
+  display: none;
+}
+#editorToolbar:not(.expanded) .editor-main-btn {
+  padding: 7px 11px;
+  font-size: .82rem;
+}
 #editorToolbar button {
   border: 0;
   padding: 9px 12px;
