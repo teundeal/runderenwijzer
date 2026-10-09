@@ -216,7 +216,7 @@ function buildEditor(){
   if(document.getElementById("editorToolbar"))return;
   const bar=document.createElement("div");
   bar.id="editorToolbar";
-  bar.innerHTML='<button class="editor-main-btn" data-a="toggle">✎ Bewerken</button><span id="editorStatus">Wijzigingen worden op deze computer opgeslagen.</span><button data-a="save">Opslaan</button><button data-a="add-source">+ Bron toevoegen</button><button data-a="add-image">+ Nieuwe afbeelding</button><button data-a="reset">Wis mijn wijzigingen</button>';
+  bar.innerHTML='<button class="editor-main-btn" data-a="toggle">✎ Bewerken</button><button class="editor-collapse-btn" data-a="collapse" aria-label="Bewerkvenster inklappen" title="Inklappen">− Inklappen</button><span id="editorStatus">Wijzigingen worden op deze computer opgeslagen.</span><button data-a="save">Opslaan</button><button data-a="add-source">+ Bron toevoegen</button><button data-a="add-image">+ Nieuwe afbeelding</button><button data-a="reset">Wis mijn wijzigingen</button>';
   document.body.appendChild(bar);
 
   const input=document.createElement("input");
@@ -225,6 +225,11 @@ function buildEditor(){
 
   bar.addEventListener("click",async e=>{
     const a=e.target.closest("button")?.dataset.a;if(!a)return;
+    if(a==="collapse"){
+      toolbarExpanded=false;
+      bar.classList.remove("expanded");
+      return;
+    }
     if(a==="toggle"){
       if(!toolbarExpanded){
         toolbarExpanded=true;
