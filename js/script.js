@@ -320,8 +320,8 @@ function showAnatomyPart(key,btn){
   const d=anatomyInfo[key]||"Klik op Bewerken om hier je eigen uitleg in te vullen.";
   const section=btn?.closest(".anatomy-plate-section");
   const popup=section?.querySelector(".anatomy-popup");
-  const t=popup?.querySelector("[data-popup-title]");
-  const p=popup?.querySelector("[data-popup-text]");
+  const t=popup?.querySelector("[data-popup-title]") || popup?.querySelector("#anatomyPopupTitle");
+  const p=popup?.querySelector("[data-popup-text]") || popup?.querySelector("#anatomyPopupText");
   if(t)t.textContent=title;
   if(p)p.textContent=d;
 }
