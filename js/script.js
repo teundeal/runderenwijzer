@@ -215,7 +215,7 @@ function buildEditor(){
   if(document.getElementById("editorToolbar"))return;
   const bar=document.createElement("div");
   bar.id="editorToolbar";
-  bar.innerHTML='<button class="editor-main-btn" data-a="toggle">✎ Bewerken</button><span id="editorStatus">Wijzigingen worden op deze computer opgeslagen.</span><button data-a="save">Opslaan</button><button data-a="add-image">+ Nieuwe afbeelding</button><button data-a="reset">Wis mijn wijzigingen</button>';
+  bar.innerHTML='<button class="editor-main-btn" data-a="toggle">✎ Bewerken</button><span id="editorStatus">Wijzigingen worden op deze computer opgeslagen.</span><button data-a="save">Opslaan</button><button data-a="add-source">+ Bron toevoegen</button><button data-a="add-image">+ Nieuwe afbeelding</button><button data-a="reset">Wis mijn wijzigingen</button>';
   document.body.appendChild(bar);
 
   const input=document.createElement("input");
@@ -255,6 +255,28 @@ function buildEditor(){
       }finally{
         if(saveButton)saveButton.disabled=false;
       }
+    }
+    if(a==="add-source"){
+      if(!editMode){alert("Klik eerst op 'Bewerken'.");return;}
+      const section=document.querySelector(".anatomy-sources");
+      const list=section?.querySelector("ul");
+      if(!list){alert("De bronnenlijst is niet gevonden.");return;}
+      const title=prompt("Naam of titel van de bron:");
+      if(!title||!title.trim())return;
+      const url=prompt("Link naar de bron (begint met https://):");
+      if(!url||!/^https?:\/\//i.test(url.trim())){alert("Vul een geldige link in die begint met https://");return;}
+      const li=document.createElement("li");
+      const link=document.createElement("a");
+      link.href=url.trim();
+      link.target="_blank";
+      link.rel="noopener noreferrer";
+      link.textContent=title.trim();
+      li.appendChild(link);
+      list.appendChild(li);
+      editable=collectEditable();
+      editable.forEach(el=>el.contentEditable="true");
+      const status=document.getElementById("editorStatus");
+      if(status)status.textContent="Bron toegevoegd. Klik op Opslaan om deze op de website te bewaren.";
     }
     if(a==="add-image"){
       if(!editMode){alert("Klik eerst op 'Bewerken'.");return;}
