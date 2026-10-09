@@ -311,7 +311,7 @@ function getAnatomyInfo(){
 const anatomyInfo=getAnatomyInfo();
 const anatomyTitles={
   mond:"Mond",speekselklieren:"Speekselklieren",slokdarm:"Slokdarm",pens:"Pens",netmaag:"Netmaag",boekmaag:"Boekmaag",lebmaag:"Lebmaag",
-  lever:"Lever",alvleesklier:"Alvleesklier",dunnedarm:"Dunne darm",dikkedarm:"Dikke darm",endeldarm:"Endeldarm",anus:"Anus",
+  lever:"Lever",alvleesklier:"Alvleesklier",blindedarm:"Blinde darm",dunnedarm:"Dunne darm",dikkedarm:"Dikke darm",endeldarm:"Endeldarm",anus:"Anus",
   oor:"Oor",oog:"Oog",neus:"Neus",hoorn:"Hoorn",nek:"Nek",schouder:"Schouder",rug:"Rug",buik:"Buik",
   uier:"Uier",staart:"Staart",heup:"Heup",been:"Been",klauw:"Klauw",kogel:"Kogel"
 };
