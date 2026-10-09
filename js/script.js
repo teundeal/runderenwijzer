@@ -109,7 +109,7 @@ let editable=[];
 
 function pageEditKey(i){return editPrefix+"text:"+pageKey+":"+i;}
 function collectEditable(){
-  return [...document.querySelectorAll("main h1,main h2,main h3,main p,main .growth-info strong,main .growth-info span,main .anatomy-sources li,main .anatomy-sources a,footer strong,footer span,footer a")]
+  return [...document.querySelectorAll("main h1,main h2,main h3,main p,main .growth-info strong,main .growth-info span,main .anatomy-sources a,footer strong,footer span,footer a")]
     .filter(el=>!el.closest(".button")&&!el.closest(".hotspot"));
 }
 function loadTextEdits(){
