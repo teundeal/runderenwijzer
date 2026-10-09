@@ -261,16 +261,22 @@ function buildEditor(){
       const section=document.querySelector(".anatomy-sources");
       const list=section?.querySelector("ul");
       if(!list){alert("De bronnenlijst is niet gevonden.");return;}
-      const title=prompt("Naam of titel van de bron:");
-      if(!title||!title.trim())return;
-      const url=prompt("Link naar de bron (begint met https://):");
-      if(!url||!/^https?:\/\//i.test(url.trim())){alert("Vul een geldige link in die begint met https://");return;}
+      const url=prompt("Plak hier de HTTPS-link van de bron:");
+      if(!url||!/^https:\/\//i.test(url.trim())){alert("Vul een geldige link in die begint met https://");return;}
+      const cleanUrl=url.trim();
+      let title;
+      try{
+        const host=new URL(cleanUrl).hostname.replace(/^www\./i,"");
+        const parts=host.split(".");
+        title=parts.length>2?parts.slice(0,-1).join("."):parts[0];
+        title=title.replace(/[-_]+/g," ").replace(/\b\w/g,char=>char.toUpperCase());
+      }catch(err){alert("Deze link is niet geldig.");return;}
       const li=document.createElement("li");
       const link=document.createElement("a");
-      link.href=url.trim();
+      link.href=cleanUrl;
       link.target="_blank";
       link.rel="noopener noreferrer";
-      link.textContent=title.trim();
+      link.textContent=title;
       li.appendChild(link);
       list.appendChild(li);
       editable=collectEditable();
