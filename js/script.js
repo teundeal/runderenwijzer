@@ -105,6 +105,7 @@ document.querySelectorAll(".hotspot").forEach(btn=>btn.addEventListener("click",
 }));
 
 let editMode=false;
+let toolbarExpanded=false;
 let editable=[];
 
 function pageEditKey(i){return editPrefix+"text:"+pageKey+":"+i;}
@@ -225,9 +226,16 @@ function buildEditor(){
   bar.addEventListener("click",async e=>{
     const a=e.target.closest("button")?.dataset.a;if(!a)return;
     if(a==="toggle"){
+      if(!toolbarExpanded){
+        toolbarExpanded=true;
+        bar.classList.add("expanded");
+        return;
+      }
       if(editMode){
         setEditMode(false);
         e.target.textContent="✎ Bewerken";
+        toolbarExpanded=false;
+        bar.classList.remove("expanded");
         return;
       }
       try{
@@ -248,6 +256,8 @@ function buildEditor(){
         await saveTextEdits();
         setEditMode(false);
         bar.querySelector('[data-a="toggle"]').textContent="✎ Bewerken";
+        toolbarExpanded=false;
+        bar.classList.remove("expanded");
         if(status)status.textContent="Opgeslagen op GitHub. De website wordt zo bijgewerkt.";
       }catch(err){
         if(status)status.textContent="Opslaan mislukt: "+err.message;
